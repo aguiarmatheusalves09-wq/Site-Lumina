@@ -66,9 +66,14 @@ def funcionamento():
     duvidas_url = url_for('duvidas')
     sobre_url = url_for('sobre')
 
+    logo_ = url_for('static', filename='imagens/logolumina.png')
+    sae_ = url_for('static', filename='imagens/saelegal.png')
     css_ = url_for('static', filename='style.css')
+
     return render_template('funcionamento.html', 
-                           css_path=css_, 
+                           css_path=css_,
+                           logo_path=logo_, 
+                           sae_path=sae_, 
                            inicio_path=inicio_url, 
                            sobre_path=sobre_url, 
                            duvidas_path=duvidas_url)
