@@ -1,5 +1,4 @@
 #Aqui é onde vamos gerenciar o banco de dados
-#from flask import sqlalchemy
 
 import pymysql as bd
 
@@ -9,13 +8,16 @@ conexao = bd.connect(host='localhost',
                      database='Lumina',
                      charset='utf8mb4')
 
-while True:
-    nome = input("Informe o nome da equipe: ")
-    titulos = int(input("Quantos titulos mundiais? "))
-    cursor = conexao.cursor()
-    cursor.execute(f"insert into Equipe values('{nome}', {titulos});")
-    conexao.commit()
+banco = conexao.cursor()
+banco.execute("select * from usuario;")
 
-    resposta = input("Cadastrar mais? (s/n) ")
-    if resposta == "n":
-        conexao.close()
+banco.fetchall() #traz um vetor
+
+for linha in banco.fetchall():
+    print(linha[0], linha[1])
+
+banco.execute("insert into usuario values(...);")
+banco.execute("commit;") #faz com que o banco de dados confie no programa externo(esse no caso) 
+
+#conexao.commit()
+conexao.close()
