@@ -1,5 +1,5 @@
-create database lumina;
-use lumina;
+create database Lumina;
+use Lumina;
 
 create table usuario(email varchar(100) not null Primary key,
 					 senha varchar(100) not null ,
