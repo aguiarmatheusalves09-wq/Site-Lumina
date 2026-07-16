@@ -11,7 +11,7 @@ create table atividades(gabarito varchar(200) not null,
 						codigoATIV varchar(100) not null primary key,
                         emailUSU varchar(100) not null ,
                         respostaUSU varchar(100) not null,
-                        FOREIGN KEY (emailUSU) REFERENCES usuario(email);
+                        FOREIGN KEY (emailUSU) REFERENCES usuario(email));
                         
 --codigo feito pelo caio guloso
 

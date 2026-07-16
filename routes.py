@@ -2,10 +2,6 @@
 from flask import render_template, url_for, redirect
 from main import app
 
-pedro = 0
-for i in range(10):
-    pedro = i
-
 @app.route("/")
 def home():
     duvidas_url = url_for('duvidas')
@@ -75,6 +71,7 @@ def funcionamento():
     inicio_url = url_for('home') 
     duvidas_url = url_for('duvidas')
     sobre_url = url_for('sobre')
+    conecte_url = url_for('conecte')
 
     logo_ = url_for('static', filename='imagens/logolumina.png')
     sae_ = url_for('static', filename='imagens/saelegal.png')
@@ -86,19 +83,51 @@ def funcionamento():
                            sae_path=sae_, 
                            inicio_path=inicio_url, 
                            sobre_path=sobre_url, 
-                           duvidas_path=duvidas_url)
+                           duvidas_path=duvidas_url,
+                           conecte_path=conecte_url)
 
 @app.route("/cadastro")
 def cadastro():
+    inicio_url = url_for('home') 
+    duvidas_url = url_for('duvidas')
+    sobre_url = url_for('sobre')
+    funcionamento_url = url_for('funcionamento')
+    conecte_url = url_for('conecte')
+
     css_ = url_for('static', filename='style.css')
+    logo_ = url_for('static', filename='imagens/logolumina.png')
+
     return render_template('cadastro.html', 
-                           css_path=css_)
+                           css_path=css_,
+                           inicio_path=inicio_url,
+                           duvidas_path=duvidas_url,
+                           sobre_path=sobre_url,
+                           funcionamento_path=funcionamento_url,
+                           logo_path=logo_,
+                           conecte_path=conecte_url)
 
 @app.route("/conecte-se")
 def conecte():
+    inicio_url = url_for('home') 
+    duvidas_url = url_for('duvidas')
+    sobre_url = url_for('sobre')
+    funcionamento_url = url_for('funcionamento')
+    conecte_url = url_for('conecte')
+    cadastro_url = url_for('cadastro')
+
     css_ = url_for('static', filename='style.css')
+    logo_ = url_for('static', filename='imagens/logolumina.png')
+
     return render_template('conecte.html', 
-                           css_path=css_)
+                           css_path=css_,
+                           inicio_path=inicio_url,
+                           duvidas_path=duvidas_url,
+                           sobre_path=sobre_url,
+                           funcionamento_path=funcionamento_url,
+                           logo_path=logo_,
+                           conecte_path=conecte_url,
+                           cadastro_path=cadastro_url)
+
 #@app.route("/usuarios/<nome_usuario>")
 #def usuarios(nome_usuario):
     #return render_template('usuarios.html', nome_usuario=nome_usuario)
