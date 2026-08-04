@@ -1,10 +1,9 @@
 # Lumina
 
-- Samuel : programação back end
-- pedro : programação back end
-- matheus : programação back end
-- kaio : banco de dados
-- zayon : banco de dados
-- romulo : banco de dados
-- bernardo : design
-- joao victor dias : design
+- Samuel : Documentação
+- Pedro : Conexão do banco de dados
+- Matheus : Contato com o cliente
+- Caio : Telas faltantes e Slides
+- Zayon : Telas faltantes e Slides
+- Romulo : Contato com o cliente
+- Bernardo : Telas faltantes e Slides
