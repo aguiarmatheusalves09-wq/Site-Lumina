@@ -1,5 +1,6 @@
 #Rotas para as páginas
 from flask import render_template, request, url_for, redirect
+from sqlalchemy import or_
 from main import app
 from db import db
 from models import Usuarios
@@ -151,7 +152,7 @@ def conecte():
         login_usuario = request.form.get("login-usuario")
         login_senha = request.form.get("login-senha")
 
-        usuario = db.session.query(Usuarios).filter(Usuarios.email == login_usuario).first()
+        usuario = db.session.query(Usuarios).filter(or_(Usuarios.email == login_usuario, Usuarios.nickname == login_usuario)).first()
 
         if usuario and usuario.senha == login_senha:
             return redirect(url_for('home')) 
