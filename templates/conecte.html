@@ -45,6 +45,16 @@
             flex-direction: column;
         }
 
+        .form-error {
+            color: #db2626;
+            background-color: rgba(255, 76, 76, 0.1);
+            border: 1px solid #FF4C4C;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
         label {
             font-weight: bold;
             color: #2D2D2D;
@@ -124,16 +134,21 @@
         </div>
 
         <div class="login-box">
-            <form onsubmit="event.preventDefault(); alert('Login simulado com sucesso!');">
+            <form method="POST" action="{{ url_for('conecte') }}">
+                {% if erro_login %}
+                    <div class="form-error">
+                        {{ erro_login }}
+                    </div>
+                {% endif %}
                 
                 <div class="form-group">
                     <label for="login-usuario">E-mail ou Nick name</label>
-                    <input type="text" id="login-usuario" required>
+                    <input type="text" id="login-usuario" name="login-usuario" required>
                 </div>
 
                 <div class="form-group">
                     <label for="login-senha">Senha</label>
-                    <input type="password" id="login-senha" required>
+                    <input type="password" id="login-senha" name="login-senha" required>
                 </div>
 
                 <div class="btn-submit-container">

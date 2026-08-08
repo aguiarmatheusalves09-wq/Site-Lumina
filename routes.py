@@ -1,6 +1,8 @@
 #Rotas para as páginas
-from flask import render_template, url_for, redirect
+from flask import render_template, request, url_for, redirect
 from main import app
+from db import db
+from models import Usuarios
 
 @app.route("/")
 def home():
@@ -86,7 +88,7 @@ def funcionamento():
                            duvidas_path=duvidas_url,
                            conecte_path=conecte_url)
 
-@app.route("/cadastro")
+@app.route("/cadastro", methods=["GET", "POST"])
 def cadastro():
     inicio_url = url_for('home') 
     duvidas_url = url_for('duvidas')
@@ -97,7 +99,9 @@ def cadastro():
     css_ = url_for('static', filename='style.css')
     logo_ = url_for('static', filename='imagens/logolumina.png')
 
-    return render_template('cadastro.html', 
+
+    if request.method == "GET":
+        return render_template('cadastro.html', 
                            css_path=css_,
                            inicio_path=inicio_url,
                            duvidas_path=duvidas_url,
@@ -105,8 +109,22 @@ def cadastro():
                            funcionamento_path=funcionamento_url,
                            logo_path=logo_,
                            conecte_path=conecte_url)
+    elif request.method == "POST":
+        nome = request.form.get("nome")
+        email = request.form.get("email")
+        senha = request.form.get("senha")
+        nickname = request.form.get("nickname")
+        dia = request.form.get("dia")
+        mes = request.form.get("mes")
+        ano = request.form.get("ano")
 
-@app.route("/conecte-se")
+        novo_usuario = Usuarios(email=email, senha=senha, nome=nome, data_nasc=f"{ano}-{mes}-{dia}", nickname=nickname)
+        db.session.add(novo_usuario)
+        db.session.commit()
+
+        return redirect(url_for('home'))
+
+@app.route("/conecte-se", methods=["GET", "POST"])
 def conecte():
     inicio_url = url_for('home') 
     duvidas_url = url_for('duvidas')
@@ -118,7 +136,8 @@ def conecte():
     css_ = url_for('static', filename='style.css')
     logo_ = url_for('static', filename='imagens/logolumina.png')
 
-    return render_template('conecte.html', 
+    if request.method == "GET":
+        return render_template('conecte.html', 
                            css_path=css_,
                            inicio_path=inicio_url,
                            duvidas_path=duvidas_url,
@@ -127,6 +146,27 @@ def conecte():
                            logo_path=logo_,
                            conecte_path=conecte_url,
                            cadastro_path=cadastro_url)
+
+    elif request.method == "POST":
+        login_usuario = request.form.get("login-usuario")
+        login_senha = request.form.get("login-senha")
+
+        usuario = db.session.query(Usuarios).filter(Usuarios.email == login_usuario).first()
+
+        if usuario and usuario.senha == login_senha:
+            return redirect(url_for('home')) 
+        else:
+            return render_template('conecte.html', 
+                           css_path=css_,
+                           inicio_path=inicio_url,
+                           duvidas_path=duvidas_url,
+                           sobre_path=sobre_url,
+                           funcionamento_path=funcionamento_url,
+                           logo_path=logo_,
+                           conecte_path=conecte_url,
+                           cadastro_path=cadastro_url,
+                           erro_login="Email ou senha incorretos!")
+
 
 #@app.route("/usuarios/<nome_usuario>")
 #def usuarios(nome_usuario):

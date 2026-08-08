@@ -1,23 +1,21 @@
 #Aqui é onde vamos gerenciar o banco de dados
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import Column, Integer, String
 
-import pymysql as bd
+class Base(DeclarativeBase):
+    pass
 
-conexao = bd.connect(host='localhost',
-                     user='root',
-                     password='admin',
-                     database='Lumina',
-                     charset='utf8mb4')
+class Usuarios(Base):
+    __tablename__ = "usuarios"
+    email = Column(String(100), nullable=False, primary_key=True)
+    senha = Column(String(100), nullable=False)
+    nome = Column(String(100), nullable=False)
+    data_nasc = Column(String(100), nullable=False)
+    nickname = Column(String(100), nullable=False, unique=True)
 
-banco = conexao.cursor()
-banco.execute("select * from usuario;")
+    def __repr__(self):
+        return f"<Usuario(email='{self.email}', senha='{self.senha}', nome='{self.nome}', data_nasc='{self.data_nasc}', nickname='{self.nickname}')>"
 
-banco.fetchall() #traz um vetor
 
-for linha in banco.fetchall():
-    print(linha[0], linha[1])
 
-banco.execute("insert into usuario values(...);")
-banco.execute("commit;") #faz com que o banco de dados confie no programa externo(esse no caso) 
 
-#conexao.commit()
-conexao.close()

@@ -148,50 +148,60 @@
         </div>
 
         <div class="cadastro-box">
-            <form onsubmit="event.preventDefault(); alert('Cadastro simulado com sucesso!');">
-                
+        <form method="POST" action="{{ url_for('cadastro') }}" onsubmit="alert('Cadastro simulado com sucesso!');">
+
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="nome">Nome</label>
-                    <input type="text" id="nome" required>
-                </div>
+                    <label>Data de Nascimento</label>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Data de Nascimento</label>
-                        <div class="data-inputs">
-                            <input type="text" maxlength="2" placeholder="DD" required>
-                            <input type="text" maxlength="2" placeholder="MM" required>
-                            <input type="text" maxlength="4" placeholder="AAAA" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="nickname">Nick name:</label>
-                        <input type="text" id="nickname" required>
+                    <div class="data-inputs">
+                        <input type="text" id="dia" name="dia"
+                            maxlength="2" placeholder="DD" required>
+
+                        <input type="text" id="mes" name="mes"
+                            maxlength="2" placeholder="MM" required>
+
+                        <input type="text" id="ano" name="ano"
+                            maxlength="4" placeholder="AAAA" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
+                    <label for="nickname">Nick name:</label>
+                    <input type="text" id="nickname" name="nickname" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" name="senha" required>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="senha">Senha:</label>
-                        <input type="password" id="senha" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirme-senha">Confirme a senha:</label>
-                        <input type="password" id="confirme-senha" required>
-                    </div>
+                <div class="form-group">
+                    <label for="confirme-senha">Confirme a senha:</label>
+                    <input type="password" id="confirme-senha"
+                        name="confirme-senha" required>
                 </div>
+            </div>
 
-                <div class="btn-submit-container">
-                    <button type="submit" class="btn-submit">Junte-se a nós!</button>
-                </div>
+            <div class="btn-submit-container">
+                <button type="submit" class="btn-submit">
+                    Junte-se a nós!
+                </button>
+            </div>
 
-            </form>
+        </form>
         </div>
 
     </main>
