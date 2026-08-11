@@ -109,6 +109,15 @@
             transform: translateY(3px);
             box-shadow: 0px 3px 0px #402E3E;
         }
+        .form-error {
+            color: #db2626;
+            background-color: rgba(255, 76, 76, 0.1);
+            border: 1px solid #FF4C4C;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
 
         @media (max-width: 600px) {
             .form-row {
@@ -148,7 +157,12 @@
         </div>
 
         <div class="cadastro-box">
-        <form method="POST" action="{{ url_for('cadastro') }}" onsubmit="alert('Cadastro realizado com sucesso!');">
+        <form method="POST" action="{{ url_for('cadastro') }}">
+            {% if erro_cadastro %}
+                <div class="form-error">
+                    {{ erro_cadastro }}
+                </div>
+            {% endif %}
 
             <div class="form-group">
                 <label for="nome">Nome</label>

@@ -1,6 +1,5 @@
 from flask import Flask
 from db import db
-from models import Usuarios
 
 usuario = "root"
 senha = "123456"

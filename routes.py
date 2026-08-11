@@ -119,12 +119,23 @@ def cadastro():
         mes = request.form.get("mes")
         ano = request.form.get("ano")
 
-        novo_usuario = Usuarios(email=email, senha=senha, nome=nome, data_nasc=f"{dia}-{mes}-{ano}", nickname=nickname)
-        db.session.add(novo_usuario)
-        db.session.commit()
+        novo_usuario = Usuarios(email=email, senha=senha, nome=nome, data_nasc=f"{ano}-{mes}-{dia}", nickname=nickname)
+        if db.session.query(Usuarios).filter(or_(Usuarios.email == email, Usuarios.nickname == nickname)).first():
+            return render_template('cadastro.html', 
+                           css_path=css_,
+                           inicio_path=inicio_url,
+                           duvidas_path=duvidas_url,
+                           sobre_path=sobre_url,
+                           funcionamento_path=funcionamento_url,
+                           logo_path=logo_,
+                           conecte_path=conecte_url,
+                           erro_cadastro="Usuário já cadastrado!")
+        else:
+            db.session.add(novo_usuario)
+            db.session.commit()
 
-        return redirect(url_for('home'))
-
+            return redirect(url_for('home'))
+        
 @app.route("/conecte-se", methods=["GET", "POST"])
 def conecte():
     inicio_url = url_for('home') 
