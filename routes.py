@@ -119,7 +119,7 @@ def cadastro():
         mes = request.form.get("mes")
         ano = request.form.get("ano")
 
-        novo_usuario = Usuarios(email=email, senha=senha, nome=nome, data_nasc=f"{ano}-{mes}-{dia}", nickname=nickname)
+        novo_usuario = Usuarios(email=email, senha=senha, nome=nome, data_nasc=f"{dia}-{mes}-{ano}", nickname=nickname)
         db.session.add(novo_usuario)
         db.session.commit()
 

@@ -35,7 +35,8 @@ create table artigo(codigoARTIGO int auto_increment primary key,
                     materia int not null,
                     foreign key (materia) references materia(codigoMAT)
 );
-                    
+
+-- services.msc             
                     
                         
 	
