@@ -1,6 +1,7 @@
 #Rotas para as páginas
 from flask import render_template, request, url_for, redirect
 from sqlalchemy import or_
+import re
 from main import app
 from db import db
 from models import Usuarios
@@ -120,7 +121,24 @@ def cadastro():
         ano = request.form.get("ano")
 
         novo_usuario = Usuarios(email=email, senha=senha, nome=nome, data_nasc=f"{ano}-{mes}-{dia}", nickname=nickname)
-        if db.session.query(Usuarios).filter(or_(Usuarios.email == email, Usuarios.nickname == nickname)).first():
+        def validar_email(email):
+            padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if re.match(padrao, email):
+                return True
+            return False 
+
+        if not validar_email(email):
+            return render_template('cadastro.html', 
+                           css_path=css_,
+                           inicio_path=inicio_url,
+                           duvidas_path=duvidas_url,
+                           sobre_path=sobre_url,
+                           funcionamento_path=funcionamento_url,
+                           logo_path=logo_,
+                           conecte_path=conecte_url,
+                           erro_email="Email inválido!")
+
+        elif db.session.query(Usuarios).filter(or_(Usuarios.email == email, Usuarios.nickname == nickname)).first():
             return render_template('cadastro.html', 
                            css_path=css_,
                            inicio_path=inicio_url,
@@ -130,6 +148,7 @@ def cadastro():
                            logo_path=logo_,
                            conecte_path=conecte_url,
                            erro_cadastro="Usuário já cadastrado!")
+
         else:
             db.session.add(novo_usuario)
             db.session.commit()

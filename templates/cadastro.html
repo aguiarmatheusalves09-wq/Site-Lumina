@@ -163,6 +163,11 @@
                     {{ erro_cadastro }}
                 </div>
             {% endif %}
+            {% if erro_email %}
+                <div class="form-error">
+                    {{ erro_email }}
+                </div>
+            {% endif %}
 
             <div class="form-group">
                 <label for="nome">Nome</label>
