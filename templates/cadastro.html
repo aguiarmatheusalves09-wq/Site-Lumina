@@ -7,14 +7,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{{css_path}}">
 </head>
 <body>
 
   <!-- Cabeçalho -->
   <header class="header">
-    <a href="index.html" class="logo-link">Lumina</a>
-    <a href="login.html" class="btn btn-sm">Login</a>
+    <a href="{{inicio_path}}" class="logo-link">Lumina</a>
+    <a href="{{login_path}}" class="btn btn-sm">Login</a>
   </header>
 
   <!-- Conteúdo Principal -->
@@ -28,7 +28,7 @@
 
     <!-- Quadrado/Card de Registro -->
     <div class="register-card">
-      <form action="#" method="POST">
+      <form action="{{ url_for('cadastro') }}" method="POST">
         
         <div class="form-group">
           <label for="nome">Nome</label>
