@@ -7,7 +7,266 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{css_path}}">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-color: #2e2854;      /* Roxo escuro */
+      --card-bg: #fff8e7;        /* Bege claro */
+      --card-shadow: #c8bdab;    /* Sombra bege */
+      --text-color: #2e2854;    /* Cor do texto */
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Fredoka', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      color: var(--text-color);
+      padding-bottom: 3rem;
+    }
+
+    /* Cabeçalho */
+    .header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2rem 3rem;
+    }
+
+    .logo-link {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5rem;
+      color: var(--card-bg);
+      text-decoration: none;
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo-link:hover {
+      opacity: 0.9;
+    }
+
+    /* Estrela Decorativa (Direita Superior) */
+    .star-icon {
+      position: absolute;
+      top: 2rem;
+      right: 3rem;
+      color: var(--card-bg);
+      font-size: 3.5rem;
+      user-select: none;
+      cursor: pointer;
+      display: inline-block;
+      z-index: 10;
+    }
+
+    @keyframes spinAnimation {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .star-icon.spin {
+      animation: spinAnimation 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Container Principal */
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-grow: 1;
+      padding: 1rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Retângulo Principal */
+    .routine-card {
+      background-color: var(--card-bg);
+      width: 100%;
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 6px 8px 0px var(--card-shadow);
+    }
+
+    /* Botões de Alternância (Ligar / Desligar Abas) */
+    .tabs-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid rgba(46, 40, 84, 0.2);
+      padding-bottom: 1rem;
+    }
+
+    .tab-btn {
+      background-color: transparent;
+      border: 2px solid var(--text-color);
+      color: var(--text-color);
+      padding: 0.8rem 1.8rem;
+      border-radius: 14px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background-color: var(--text-color);
+      color: var(--card-bg);
+      box-shadow: 3px 4px 0px var(--card-shadow);
+    }
+
+    /* Área de Conteúdo das Abas */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* --- ESTILOS DO CRONOGRAMA SEMANAL --- */
+    .weekly-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+    }
+
+    .day-column {
+      background-color: rgba(46, 40, 84, 0.05);
+      border-radius: 16px;
+      padding: 1rem 0.8rem;
+      border: 2px solid var(--text-color);
+    }
+
+    .day-column h3 {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--text-color);
+      padding-bottom: 0.4rem;
+    }
+
+    .time-slot {
+      margin-bottom: 0.8rem;
+    }
+
+    .time-slot label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      opacity: 0.8;
+    }
+
+    .time-slot textarea {
+      width: 100%;
+      height: 60px;
+      border-radius: 8px;
+      border: 1px solid var(--text-color);
+      background-color: transparent;
+      padding: 0.4rem;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.85rem;
+      resize: none;
+      outline: none;
+      color: var(--text-color);
+    }
+
+    .time-slot textarea:focus {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* --- ESTILOS DO CRONOGRAMA MENSAL --- */
+    .monthly-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.8rem;
+    }
+
+    .month-day {
+      background-color: rgba(46, 40, 84, 0.05);
+      border: 2px solid var(--text-color);
+      border-radius: 12px;
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .month-day span {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .month-day select {
+      width: 100%;
+      padding: 0.4rem;
+      border-radius: 8px;
+      border: 1px solid var(--text-color);
+      background-color: transparent;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-color);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Botão de Salvar */
+    .action-container {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .save-btn {
+      background-color: var(--text-color);
+      color: var(--card-bg);
+      border: none;
+      padding: 0.9rem 2.5rem;
+      border-radius: 16px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 4px 5px 0px var(--card-shadow);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .save-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 2px 0px var(--card-shadow);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .weekly-grid {
+        grid-template-columns: 1fr;
+      }
+      .star-icon {
+        top: 1.5rem;
+        right: 1.5rem;
+      }
+      .tabs-container {
+        flex-direction: column;
+      }
+      .action-container {
+        justify-content: center;
+      }
+      .save-btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 

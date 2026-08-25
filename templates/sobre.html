@@ -7,7 +7,158 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{css_path}}">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-color: #2e2854;      /* Roxo escuro */
+      --card-bg: #fff8e7;        /* Bege claro */
+      --card-shadow: #c8bdab;    /* Sombra bege */
+      --text-color: #2e2854;    /* Cor do texto */
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Fredoka', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      color: var(--text-color);
+      padding-bottom: 3rem;
+    }
+
+    /* Cabeçalho */
+    .header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2rem 3rem;
+    }
+
+    .logo-link {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5rem;
+      color: var(--card-bg);
+      text-decoration: none;
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo-link:hover {
+      opacity: 0.9;
+    }
+
+    /* Estrela Decorativa no canto SUPERIOR DIREITO */
+    .star-icon {
+      position: absolute;
+      top: 2rem;
+      right: 3rem;
+      color: var(--card-bg);
+      font-size: 3.5rem;
+      user-select: none;
+      cursor: pointer;
+      display: inline-block;
+      z-index: 10;
+    }
+
+    @keyframes spinAnimation {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .star-icon.spin {
+      animation: spinAnimation 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Conteúdo Principal */
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Layout da Grade de Cards */
+    .cards-grid {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+      gap: 2rem;
+      width: 100%;
+    }
+
+    /* Estilo Individual dos Cards */
+    .about-card {
+      background-color: var(--card-bg);
+      flex: 1;
+      min-width: 280px;
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 6px 8px 0px var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-card h1, .about-card h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      border-bottom: 2px solid rgba(46, 40, 84, 0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    .about-card p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+
+    .about-card p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    /* Badge de Versão */
+    .version-tag {
+      display: inline-block;
+      margin-top: auto;
+      padding: 0.4rem 1rem;
+      background-color: rgba(46, 40, 84, 0.1);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      align-self: flex-start;
+    }
+
+    /* Responsividade */
+    @media (max-width: 950px) {
+      .cards-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .about-card {
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .star-icon {
+        top: 1.5rem;
+        right: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
