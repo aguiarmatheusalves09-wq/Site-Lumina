@@ -1,0 +1,310 @@
+<html>
+<head>
+  <title>Configurações - Lumina</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-color: #2e2854;      /* Roxo escuro */
+      --card-bg: #fff8e7;        /* Bege claro */
+      --card-shadow: #c8bdab;    /* Sombra bege */
+      --text-color: #2e2854;    /* Cor do texto */
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Fredoka', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      color: var(--text-color);
+      padding-bottom: 3rem;
+    }
+
+    /* Cabeçalho */
+    .header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2rem 3rem;
+    }
+
+    .logo-link {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5rem;
+      color: var(--card-bg);
+      text-decoration: none;
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo-link:hover {
+      opacity: 0.9;
+    }
+
+    /* Estrela Decorativa no canto SUPERIOR DIREITO */
+    .star-icon {
+      position: absolute;
+      top: 2rem;
+      right: 3rem;
+      color: var(--card-bg);
+      font-size: 3.5rem;
+      user-select: none;
+      cursor: pointer;
+      display: inline-block;
+      z-index: 10;
+    }
+
+    @keyframes spinAnimation {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .star-icon.spin {
+      animation: spinAnimation 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Conteúdo Principal */
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      padding: 1rem 2rem;
+      max-width: 650px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Card de Configurações */
+    .config-card {
+      background-color: var(--card-bg);
+      width: 100%;
+      padding: 2.5rem 2.5rem;
+      border-radius: 24px;
+      box-shadow: 6px 8px 0px var(--card-shadow);
+    }
+
+    .config-card h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid rgba(46, 40, 84, 0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    /* Seção da Foto de Perfil */
+    .profile-upload {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .avatar-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: rgba(46, 40, 84, 0.1);
+      border: 2px dashed var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      overflow: hidden;
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .file-input-label {
+      background-color: transparent;
+      color: var(--text-color);
+      border: 2px solid var(--text-color);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .file-input-label:hover {
+      background-color: rgba(46, 40, 84, 0.1);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    /* Form Grupos */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+    }
+
+    .form-group input {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: 2px solid var(--text-color);
+      background-color: transparent;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      color: var(--text-color);
+      outline: none;
+    }
+
+    .form-group input:focus {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .divider {
+      margin: 1.5rem 0 1rem 0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Botão Salvar */
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.3rem;
+      border-radius: 16px;
+      margin-top: 1rem;
+      background-color: var(--text-color);
+      color: var(--card-bg);
+      border: none;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 4px 5px 0px var(--card-shadow);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .btn-submit:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 2px 0px var(--card-shadow);
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      .star-icon {
+        top: 1.5rem;
+        right: 1.5rem;
+      }
+      .config-card {
+        padding: 1.8rem 1.2rem;
+      }
+      .profile-upload {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cabeçalho (Logo na esquerda superior) -->
+  <header class="header">
+    <a href="home.html" class="logo-link">Lumina</a>
+  </header>
+
+  <!-- Estrela Decorativa (Direita Superior) -->
+  <div class="star-icon" id="star">✦</div>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-container">
+
+    <div class="config-card">
+      <h1>Geral</h1>
+      
+      <form action="#" method="POST">
+        
+        <!-- Alterar Foto de Perfil -->
+        <div class="profile-upload">
+          <div class="avatar-preview" id="avatarPreview">👤</div>
+          <div>
+            <label for="foto" class="file-input-label">Alterar Foto de Perfil</label>
+            <input type="file" id="foto" name="foto" accept="image/*">
+          </div>
+        </div>
+
+        <!-- E-mail Relacionado -->
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" value="seuemail@exemplo.com" required>
+        </div>
+
+        <!-- Nova Senha -->
+        <div class="form-group">
+          <label for="nova-senha">Nova Senha (opcional)</label>
+          <input type="password" id="nova-senha" name="nova-senha" placeholder="Digite a nova senha">
+        </div>
+
+        <p class="divider">Confirmação de Segurança</p>
+
+        <!-- Senha Atual (Obrigatória para alterar) -->
+        <div class="form-group">
+          <label for="senha-atual">Senha Atual</label>
+          <input type="password" id="senha-atual" name="senha-atual" placeholder="Digite sua senha atual para salvar" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Salvar Alterações</button>
+
+      </form>
+    </div>
+
+  </main>
+
+  <script>
+    // Animação da estrela
+    const star = document.getElementById('star');
+    star.addEventListener('click', () => {
+      star.classList.add('spin');
+      star.addEventListener('animationend', () => {
+        star.classList.remove('spin');
+      }, { once: true });
+    });
+
+    // Preview da foto de perfil ao escolher um arquivo
+    const fotoInput = document.getElementById('foto');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    fotoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          avatarPreview.innerHTML = `<img src="${evt.target.result}" alt="Foto de Perfil">`;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+
+</body>
+</html>
