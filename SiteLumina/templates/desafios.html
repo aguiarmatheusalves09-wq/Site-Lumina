@@ -1,0 +1,182 @@
+<html>
+<head>
+  <title>Desafios - Lumina</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho (Logo na esquerda superior) -->
+  <header class="header">
+    <a href="home.html" class="logo-link">Lumina</a>
+  </header>
+
+  <!-- Estrela Decorativa (Direita Superior) -->
+  <div class="star-icon" id="star">✦</div>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-container">
+
+    <div class="challenge-card">
+      
+      <!-- FASE 1: Seleção de Matéria e Dificuldade -->
+      <div id="step-select">
+        <h1>Desafios</h1>
+        
+        <div class="form-group">
+          <label for="dificuldade">Dificuldade</label>
+          <select id="dificuldade">
+            <option value="Fácil">Fácil</option>
+            <option value="Médio">Médio</option>
+            <option value="Difícil">Difícil</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="materia">Matéria</label>
+          <select id="materia">
+            <option value="Matemática">Matemática</option>
+            <option value="Química">Química</option>
+            <option value="Física">Física</option>
+            <option value="Biologia">Biologia</option>
+          </select>
+        </div>
+
+        <button class="btn-action" onclick="startChallenge()">Gerar Desafio</button>
+      </div>
+
+      <!-- FASE 2: Exibição da Pergunta -->
+      <div id="step-question" style="display: none;">
+        <div class="question-box">
+          <p class="question-text" id="question-title"></p>
+          <div class="options-list" id="options-container"></div>
+        </div>
+        <div id="feedback" class="feedback-msg"></div>
+      </div>
+
+      <!-- FASE 3: Tela de Parabéns -->
+      <div id="step-congrats" class="congrats-box" style="display: none;">
+        <h2>Parabéns! 🎉</h2>
+        <p>Você acertou a resposta e concluiu o desafio com sucesso!</p>
+        <button class="btn-action" onclick="resetChallenge()">Retornar para mais um desafio</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Banco de Perguntas (2 por matéria)
+    const questionsDatabase = {
+      "Matemática": [
+        {
+          pergunta: "Quanto é 7 x 8?",
+          opcoes: ["48", "54", "56", "64"],
+          correta: 2
+        },
+        {
+          pergunta: "Qual é a raiz quadrada de 144?",
+          opcoes: ["10", "12", "14", "16"],
+          correta: 1
+        }
+      ],
+      "Química": [
+        {
+          pergunta: "Qual é a fórmula química da água?",
+          opcoes: ["CO2", "H2O", "NaCl", "O2"],
+          correta: 1
+        },
+        {
+          pergunta: "Qual elemento possui o símbolo 'O' na tabela periódica?",
+          opcoes: ["Ouro", "Osmo", "Oxigênio", "Oganessônio"],
+          correta: 2
+        }
+      ],
+      "Física": [
+        {
+          pergunta: "De acordo com a física, qual é o valor aproximado da aceleração da gravidade na Terra?",
+          opcoes: ["5 m/s²", "9,8 m/s²", "15 m/s²", "20 m/s²"],
+          correta: 1
+        },
+        {
+          pergunta: "Qual é a unidade de medida de força no Sistema Internacional?",
+          opcoes: ["Joule", "Watt", "Pascal", "Newton"],
+          correta: 3
+        }
+      ],
+      "Biologia": [
+        {
+          pergunta: "Qual organela celular é responsável pela produção de energia (ATP)?",
+          opcoes: ["Mitocôndria", "Complexo de Golgi", "Ribossomo", "Lisossomo"],
+          correta: 0
+        },
+        {
+          pergunta: "Qual dessas opções é um ser autótrofo?",
+          opcoes: ["Fungo", "Planta", "Animal", "Bactéria heterotrófica"],
+          correta: 1
+        }
+      ]
+    };
+
+    let currentCorrectOption = null;
+
+    function startChallenge() {
+      const materia = document.getElementById('materia').value;
+      const questionsList = questionsDatabase[materia];
+      
+      // Sorteia uma das duas perguntas da matéria escolhida
+      const randomIndex = Math.floor(Math.random() * questionsList.length);
+      const questionData = questionsList[randomIndex];
+
+      currentCorrectOption = questionData.correta;
+
+      // Monta a pergunta na tela
+      document.getElementById('question-title').innerText = questionData.pergunta;
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+      document.getElementById('feedback').innerText = '';
+
+      questionData.opcoes.forEach((opcao, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opcao;
+        btn.onclick = () => checkAnswer(index);
+        optionsContainer.appendChild(btn);
+      });
+
+      // Alterna as telas
+      document.getElementById('step-select').style.display = 'none';
+      document.getElementById('step-question').style.display = 'block';
+    }
+
+    function checkAnswer(selectedIndex) {
+      if (selectedIndex === currentCorrectOption) {
+        document.getElementById('step-question').style.display = 'none';
+        document.getElementById('step-congrats').style.display = 'block';
+      } else {
+        document.getElementById('feedback').innerText = 'Resposta incorreta. Tente novamente!';
+      }
+    }
+
+    function resetChallenge() {
+      document.getElementById('step-congrats').style.display = 'none';
+      document.getElementById('step-select').style.display = 'block';
+    }
+
+    // Animação da estrela
+    const star = document.getElementById('star');
+    star.addEventListener('click', () => {
+      star.classList.add('spin');
+      star.addEventListener('animationend', () => {
+        star.classList.remove('spin');
+      }, { once: true });
+    });
+  </script>
+
+</body>
+</html>

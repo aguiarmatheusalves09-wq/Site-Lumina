@@ -1,0 +1,93 @@
+<html>
+<head>
+  <title>Configurações - Lumina</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho (Logo na esquerda superior) -->
+  <header class="header">
+    <a href="home.html" class="logo-link">Lumina</a>
+  </header>
+
+  <!-- Estrela Decorativa (Direita Superior) -->
+  <div class="star-icon" id="star">✦</div>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-container">
+
+    <div class="config-card">
+      <h1>Geral</h1>
+      
+      <form action="#" method="POST">
+        
+        <!-- Alterar Foto de Perfil -->
+        <div class="profile-upload">
+          <div class="avatar-preview" id="avatarPreview">👤</div>
+          <div>
+            <label for="foto" class="file-input-label">Alterar Foto de Perfil</label>
+            <input type="file" id="foto" name="foto" accept="image/*">
+          </div>
+        </div>
+
+        <!-- E-mail Relacionado -->
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" value="seuemail@exemplo.com" required>
+        </div>
+
+        <!-- Nova Senha -->
+        <div class="form-group">
+          <label for="nova-senha">Nova Senha (opcional)</label>
+          <input type="password" id="nova-senha" name="nova-senha" placeholder="Digite a nova senha">
+        </div>
+
+        <p class="divider">Confirmação de Segurança</p>
+
+        <!-- Senha Atual (Obrigatória para alterar) -->
+        <div class="form-group">
+          <label for="senha-atual">Senha Atual</label>
+          <input type="password" id="senha-atual" name="senha-atual" placeholder="Digite sua senha atual para salvar" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Salvar Alterações</button>
+
+      </form>
+    </div>
+
+  </main>
+
+  <script>
+    // Animação da estrela
+    const star = document.getElementById('star');
+    star.addEventListener('click', () => {
+      star.classList.add('spin');
+      star.addEventListener('animationend', () => {
+        star.classList.remove('spin');
+      }, { once: true });
+    });
+
+    // Preview da foto de perfil ao escolher um arquivo
+    const fotoInput = document.getElementById('foto');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    fotoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          avatarPreview.innerHTML = `<img src="${evt.target.result}" alt="Foto de Perfil">`;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+
+</body>
+</html>
