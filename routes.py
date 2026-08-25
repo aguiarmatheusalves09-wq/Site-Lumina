@@ -12,10 +12,10 @@ def home():
     login_url = url_for('login')
 
     logo_ = url_for('static', filename='imagens/logo.png')
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
 
     return render_template('index.html', 
-                           css_path=css_, 
+                           #css_path=css_, 
                            logo_path=logo_,
                            cadastro_path=cadastro_url,
                            login_path=login_url)
@@ -25,13 +25,13 @@ def cadastro():
     inicio_url = url_for('home') 
     login_url = url_for('login')
 
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
     logo_ = url_for('static', filename='imagens/logo.png')
 
 
     if request.method == "GET":
         return render_template('cadastro.html', 
-                           css_path=css_,
+                           #css_path=css_,
                            inicio_path=inicio_url,
                            logo_path=logo_,
                            login_path=login_url)
@@ -50,7 +50,7 @@ def cadastro():
 
         if not validar_email(email):
             return render_template('cadastro.html', 
-                           css_path=css_,
+                           #css_path=css_,
                            inicio_path=inicio_url,
                            logo_path=logo_,
                            login_path=login_url,
@@ -58,7 +58,7 @@ def cadastro():
 
         elif db.session.query(Usuarios).filter(Usuarios.email == email).first():
             return render_template('cadastro.html', 
-                           css_path=css_,
+                           #css_path=css_,
                            inicio_path=inicio_url,
                            logo_path=logo_,
                            login_path=login_url,
@@ -78,12 +78,12 @@ def login():
     home_url = url_for('principal_home')
 
 
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
     logo_ = url_for('static', filename='imagens/logo.png')
 
     if request.method == "GET":
         return render_template('login.html', 
-                           css_path=css_,
+                           #css_path=css_,
                            inicio_path=inicio_url,
                            logo_path=logo_,
                            login_path=login_url,
@@ -117,10 +117,10 @@ def principal_home():
     sobre_url = url_for('sobre')
 
     logo_ = url_for('static', filename='imagens/logo.png')
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
 
     return render_template('home.html', 
-                           css_path=css_, 
+                           #css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url,
                            rotina_path=rotina_url,
@@ -133,10 +133,10 @@ def rotina():
     home_url = url_for('principal_home')
 
     logo_ = url_for('static', filename='imagens/logo.png')
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
 
     return render_template('rotina.html', 
-                           css_path=css_, 
+                           #css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url)
 
@@ -145,10 +145,10 @@ def materias():
     home_url = url_for('principal_home')
 
     logo_ = url_for('static', filename='imagens/logo.png')
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
 
     return render_template('materias.html', 
-                           css_path=css_, 
+                           #css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url)
 
@@ -157,10 +157,10 @@ def desafios():
     home_url = url_for('principal_home')
 
     logo_ = url_for('static', filename='imagens/logo.png')
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
 
     return render_template('desafios.html', 
-                           css_path=css_, 
+                           #css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url)
 
@@ -169,10 +169,10 @@ def sobre():
     home_url = url_for('principal_home')
 
     logo_ = url_for('static', filename='imagens/logo.png')
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
 
     return render_template('sobre.html', 
-                           css_path=css_, 
+                           #css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url)
 
@@ -181,10 +181,10 @@ def configuracao():
     home_url = url_for('principal_home')
 
     logo_ = url_for('static', filename='imagens/logo.png')
-    css_ = url_for('static', filename='style.css')
+    #css_ = url_for('static', filename='style.css')
 
     return render_template('config.html', 
-                           css_path=css_, 
+                           #css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url)
 
