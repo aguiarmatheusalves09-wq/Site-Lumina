@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Cadastro - Lumina</title>
+  <title>Login - Lumina</title>
   
   <!-- Fontes do Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
       user-select: none;
     }
 
-    /* Botão de navegação (Login) */
+    /* Botão de navegação (Cadastre-se) */
     .btn {
       background-color: var(--btn-bg);
       color: var(--text-color);
@@ -107,7 +107,7 @@
     }
 
     /* Card/Quadrado do Formulário */
-    .register-card {
+    .login-card {
       background-color: var(--btn-bg);
       color: var(--text-color);
       width: 100%;
@@ -187,7 +187,7 @@
       .header-text p {
         font-size: 1rem;
       }
-      .register-card {
+      .login-card {
         padding: 1.8rem 1.2rem;
       }
     }
@@ -198,7 +198,7 @@
   <!-- Cabeçalho -->
   <header class="header">
     <a href="index.html" class="logo-link">Lumina</a>
-    <a href="login.html" class="btn btn-sm">Login</a>
+    <a href="cadastro.html" class="btn btn-sm">Cadastre-se</a>
   </header>
 
   <!-- Conteúdo Principal -->
@@ -206,24 +206,14 @@
     
     <!-- Texto acima do quadrado -->
     <div class="header-text">
-      <h1>Vamos estudar!</h1>
-      <p>Registre-se e continue sua jornada de aprendizado. Aqui, cada acesso é uma nova chance de evoluir, revisar conteúdos e conquistar seus objetivos com confiança.</p>
+      <h1>Bem vindo(a) de volta!</h1>
+      <p>Estamos felizes em ter você aqui novamente. Faça seu login para continuar de onde parou e aproveitar todos os recursos disponíveis na plataforma. Desejamos bons estudos, foco e muito sucesso na sua jornada de aprendizado.</p>
     </div>
 
-    <!-- Quadrado/Card de Registro -->
-    <div class="register-card">
+    <!-- Quadrado/Card de Login -->
+    <div class="login-card">
       <form action="#" method="POST">
         
-        <div class="form-group">
-          <label for="nome">Nome</label>
-          <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
-        </div>
-
-        <div class="form-group">
-          <label for="nickname">Nickname</label>
-          <input type="text" id="nickname" name="nickname" placeholder="Como quer ser chamado(a)" required>
-        </div>
-
         <div class="form-group">
           <label for="email">E-mail</label>
           <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
@@ -231,10 +221,10 @@
 
         <div class="form-group">
           <label for="senha">Senha</label>
-          <input type="password" id="senha" name="senha" placeholder="Sua senha secreta" required>
+          <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
         </div>
 
-        <button type="submit" class="btn btn-submit">Cadastrar</button>
+        <button type="submit" class="btn btn-submit">Entrar</button>
 
       </form>
     </div>
