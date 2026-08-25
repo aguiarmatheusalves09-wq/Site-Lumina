@@ -1,0 +1,67 @@
+<html>
+<head>
+  <title>Login - Lumina</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header class="header">
+    <a href="index.html" class="logo-link">Lumina</a>
+    <a href="cadastro.html" class="btn btn-sm">Cadastre-se</a>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-container">
+    
+    <!-- Texto acima do quadrado -->
+    <div class="header-text">
+      <h1>Bem vindo(a) de volta!</h1>
+      <p>Estamos felizes em ter você aqui novamente. Faça seu login para continuar de onde parou e aproveitar todos os recursos disponíveis na plataforma. Desejamos bons estudos, foco e muito sucesso na sua jornada de aprendizado.</p>
+    </div>
+
+    <!-- Quadrado/Card de Login -->
+    <div class="login-card">
+      <form action="#" method="POST">
+        
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+        </div>
+
+        <button type="submit" class="btn btn-submit">Entrar</button>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Elemento Decorativo -->
+  <div class="star-icon" id="star">✦</div>
+
+  <!-- Script para a animação da estrela -->
+  <script>
+    const star = document.getElementById('star');
+
+    star.addEventListener('click', () => {
+      star.classList.add('spin');
+
+      star.addEventListener('animationend', () => {
+        star.classList.remove('spin');
+      }, { once: true });
+    });
+  </script>
+
+</body>
+</html>
