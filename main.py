@@ -2,9 +2,9 @@ from flask import Flask
 from db import db
 
 usuario = "root"
-senha = "YYlpCCBdeJKeSUizJtJDxiEILSXekBVD"
-host = "altaria.proxy.rlwy.net"
-porta = 58549
+senha = ""
+host = "127.0.0.1"
+porta = 3306
 banco = "Lumina"
 #mysql://root:YYlpCCBdeJKeSUizJtJDxiEILSXekBVD@altaria.proxy.rlwy.net:58549/railway
 
