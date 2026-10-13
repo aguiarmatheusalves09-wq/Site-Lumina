@@ -44,9 +44,7 @@ def cadastro():
         novo_usuario = Usuarios(email=email, senha=senha, nome=nome, nickname=nickname)
         def validar_email(email):
             padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-            if re.match(padrao, email):
-                return True
-            return False 
+            return bool(re.fullmatch(padrao, email))
 
         if not validar_email(email):
             return render_template('cadastro.html', 
