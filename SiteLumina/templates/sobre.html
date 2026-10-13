@@ -1,0 +1,63 @@
+<html>
+<head>
+  <title>Sobre - Lumina</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho (Logo na esquerda superior) -->
+  <header class="header">
+    <a href="home.html" class="logo-link">Lumina</a>
+  </header>
+
+  <!-- Estrela Decorativa (Direita Superior) -->
+  <div class="star-icon" id="star">✦</div>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-container">
+
+    <div class="cards-grid">
+      <!-- Card 1: Sobre o Lumina -->
+      <div class="about-card">
+        <h1>Sobre o Lumina</h1>
+        <p>O <strong>Lumina</strong> é uma plataforma intuitiva desenvolvida para organizar sua rotina de estudos, acompanhar suas matérias e superar desafios diários no seu próprio ritmo.</p>
+        <p>Desenvolvido com carinho para oferecer uma experiência simples, limpa e agradável.</p>
+        <div class="version-tag">Versão 1.0.0</div>
+      </div>
+
+      <!-- Card 2: Como Funciona -->
+      <div class="about-card">
+        <h2>Como Funciona</h2>
+        <p>Nossa plataforma foi pensada para guiar você do início até a aprovação, com um método completo que combina organização prática e acompanhamentos.</p>
+        <p>Tudo funciona de forma simples e integrada.</p>
+      </div>
+
+      <!-- Card 3: Nossa Missão -->
+      <div class="about-card">
+        <h2>Nossa Missão</h2>
+        <p>Acreditamos que não basta estudar mais, é preciso estudar melhor.</p>
+        <p>Por isso, oferecemos uma experiência que une teoria, prática e estratégia, ajudando você a evoluir de verdade ao longo da sua jornada.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Animação da estrela
+    const star = document.getElementById('star');
+    star.addEventListener('click', () => {
+      star.classList.add('spin');
+      star.addEventListener('animationend', () => {
+        star.classList.remove('spin');
+      }, { once: true });
+    });
+  </script>
+
+</body>
+</html>

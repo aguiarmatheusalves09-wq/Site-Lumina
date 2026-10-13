@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Lumina</title>
+  
+  <!-- Fonte do Google para os botões -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header class="header">
+    <a href="login.html" class="btn btn-sm">Login</a>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-container">
+    <!-- Coloque o caminho da sua imagem no atributo src abaixo -->
+    <img src="imagens\logo.png" alt="Logo Lumina" class="logo-img">
+    <a href="cadastro.html" class="btn btn-lg">Cadastre</a>
+  </main>
+
+  <!-- Elemento Decorativo -->
+  <div class="star-icon" id="star">✦</div>
+
+  <!-- Script para a animação da estrela -->
+  <script>
+    const star = document.getElementById('star');
+
+    star.addEventListener('click', () => {
+      star.classList.add('spin');
+
+      star.addEventListener('animationend', () => {
+        star.classList.remove('spin');
+      }, { once: true });
+    });
+  </script>
+
+</body>
+</html>

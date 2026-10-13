@@ -1,0 +1,67 @@
+<html>
+<head>
+  <title>Lumina - Home</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header class="header">
+    <a href="home.html" class="logo-link">Lumina</a>
+  </header>
+
+  <!-- Estrela Decorativa (Direita Superior) -->
+  <div class="star-icon" id="star">✦</div>
+
+  <section class="hero-section">
+    <div class="hero-stripe"></div>
+    <h1 class="hero-title">Lumina</h1>
+    <p class="hero-subtitle">Sua jornada de aprendizado, organizada e leve.</p>
+  </section>
+
+  <!-- Navegação Principal -->
+  <main class="main-container">
+    <div class="menu-grid">
+      
+      <a href="rotina.html" class="menu-card">
+        <h2>Rotina</h2>
+        <p>Organize seus horários semanais e mensais.</p>
+      </a>
+
+      <a href="materias.html" class="menu-card">
+        <h2>Matérias</h2>
+        <p>Acesse conteúdos e assista às aulas.</p>
+      </a>
+
+      <a href="desafios.html" class="menu-card">
+        <h2>Desafios</h2>
+        <p>Teste seus conhecimentos com quiz rápido.</p>
+      </a>
+
+      <a href="sobre.html" class="menu-card">
+        <h2>Sobre</h2>
+        <p>Conheça a plataforma e nossa missão.</p>
+      </a>
+
+    </div>
+  </main>
+
+  <script>
+    // Animação da estrela
+    const star = document.getElementById('star');
+    star.addEventListener('click', () => {
+      star.classList.add('spin');
+      star.addEventListener('animationend', () => {
+        star.classList.remove('spin');
+      }, { once: true });
+    });
+  </script>
+
+</body>
+</html>
