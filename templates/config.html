@@ -1,307 +1,255 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <title>Configurações - Lumina</title>
-  
-  <!-- Fontes do Google -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfil - Lumina</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg-color: #2e2854;      /* Roxo escuro */
-      --card-bg: #fff8e7;        /* Bege claro */
-      --card-shadow: #c8bdab;    /* Sombra bege */
-      --text-color: #2e2854;    /* Cor do texto */
-    }
-
-    body {
-      background-color: var(--bg-color);
-      font-family: 'Fredoka', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      color: var(--text-color);
-      padding-bottom: 3rem;
-    }
-
-    /* Cabeça */
-    .header {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 2rem 3rem;
-    }
-
-    .logo-link {
-      font-family: 'Pacifico', cursive;
-      font-size: 2.5rem;
-      color: var(--card-bg);
-      text-decoration: none;
-      user-select: none;
-      transition: opacity 0.2s ease;
-    }
-
-    .logo-link:hover {
-      opacity: 0.9;
-    }
-
-    /* Estrela */
-    .star-icon {
-      position: absolute;
-      top: 2rem;
-      right: 3rem;
-      color: var(--card-bg);
-      font-size: 3.5rem;
-      user-select: none;
-      cursor: pointer;
-      display: inline-block;
-      z-index: 10;
-    }
-
-    @keyframes spinAnimation {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .star-icon.spin {
-      animation: spinAnimation 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Conteúdo Principal */
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex-grow: 1;
-      padding: 1rem 2rem;
-      max-width: 650px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    /* Configurações */
-    .config-card {
-      background-color: var(--card-bg);
-      width: 100%;
-      padding: 2.5rem 2.5rem;
-      border-radius: 24px;
-      box-shadow: 6px 8px 0px var(--card-shadow);
-    }
-
-    .config-card h1 {
-      font-size: 2.2rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid rgba(46, 40, 84, 0.2);
-      padding-bottom: 0.5rem;
-    }
-
-    /* Seção da Foto de Perfil */
-    .profile-upload {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 1.8rem;
-    }
-
-    .avatar-preview {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: rgba(46, 40, 84, 0.1);
-      border: 2px dashed var(--text-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      overflow: hidden;
-    }
-
-    .avatar-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .file-input-label {
-      background-color: transparent;
-      color: var(--text-color);
-      border: 2px solid var(--text-color);
-      padding: 0.6rem 1.2rem;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    .file-input-label:hover {
-      background-color: rgba(46, 40, 84, 0.1);
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    /* Form Grupos */
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 1.2rem;
-    }
-
-    .form-group label {
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-      font-size: 1rem;
-    }
-
-    .form-group input {
-      padding: 0.8rem 1rem;
-      border-radius: 12px;
-      border: 2px solid var(--text-color);
-      background-color: transparent;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1rem;
-      color: var(--text-color);
-      outline: none;
-    }
-
-    .form-group input:focus {
-      background-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .divider {
-      margin: 1.5rem 0 1rem 0;
-      font-size: 0.9rem;
-      font-weight: 600;
-      opacity: 0.7;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Botão Salvar */
-    .btn-submit {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.3rem;
-      border-radius: 16px;
-      margin-top: 1rem;
-      background-color: var(--text-color);
-      color: var(--card-bg);
-      border: none;
-      font-family: 'Fredoka', sans-serif;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 4px 5px 0px var(--card-shadow);
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-    }
-
-    .btn-submit:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 2px 0px var(--card-shadow);
-    }
-
-    /* Responsividade */
-    @media (max-width: 600px) {
-      .star-icon {
-        top: 1.5rem;
-        right: 1.5rem;
-      }
-      .config-card {
-        padding: 1.8rem 1.2rem;
-      }
-      .profile-upload {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-  <!-- cabeça-->
   <header class="header">
-    <a href="{{home_path}}" class="logo-link">Lumina</a>
+    <a href="{{ home_path }}" class="logo-link">Lumina</a>
   </header>
 
-  <!-- Estrela  -->
   <div class="star-icon" id="star">✦</div>
 
-  <!-- Conteúdo Principal -->
-  <main class="main-container">
+  <main class="main-container main-sm">
+    <div class="card config-card">
 
-    <div class="config-card">
-      <h1>Geral</h1>
-        
-        <!-- Alterar foto de perfil -->
-        <div class="profile-upload">
-          <div class="avatar-preview" id="avatarPreview">👤</div>
-          <div>
-            <label for="foto" class="file-input-label">Alterar Foto de Perfil</label>
-            <input type="file" id="foto" name="foto" accept="image/*">
+      <!-- Abas: Perfil / Editar -->
+      <div class="profile-tabs">
+        <button class="profile-tab-btn active" onclick="switchProfileTab('view', this)">Perfil</button>
+        <button class="profile-tab-btn" onclick="switchProfileTab('edit', this)">Editar</button>
+      </div>
+
+      <!-- ===== PAINEL: VISUALIZAR PERFIL ===== -->
+      <div id="panel-view" class="profile-panel active">
+        <div class="profile-view">
+
+          <div class="profile-avatar-lg" id="profileAvatarLg">👤</div>
+
+          <div class="profile-info">
+            <div class="profile-name" id="displayName">Seu Nome</div>
+            <div class="profile-nickname" id="displayNickname">@seunickname</div>
+            <div class="profile-email" id="displayEmail">seuemail@exemplo.com</div>
           </div>
+
+          <!-- Sequência + Recordes -->
+          <div class="streak-row">
+            <div class="streak-card">
+              <div class="streak-icon">🔥</div>
+              <div class="streak-value" id="streakCount">0</div>
+              <div class="streak-label">Dias seguidos</div>
+            </div>
+            <div class="streak-card">
+              <div class="streak-icon">🏆</div>
+              <div class="streak-value" id="streakBest">0</div>
+              <div class="streak-label">Melhor sequência</div>
+            </div>
+            <div class="streak-card">
+              <div class="streak-icon">📅</div>
+              <div class="streak-value" id="totalDays">0</div>
+              <div class="streak-label">Total de dias</div>
+            </div>
+          </div>
+
+          <!-- Barra de dias da semana -->
+          <div class="streak-week">
+            <div class="streak-week-title">Esta semana</div>
+            <div class="streak-days" id="weekDays"></div>
+          </div>
+
+          <!-- Botão de marcar acesso do dia -->
+          <button class="btn-action" id="checkInBtn" onclick="doCheckIn()" style="margin-top:0">
+            ✓ Marcar acesso de hoje
+          </button>
+
         </div>
+      </div>
 
-        <!-- email relacionado -->
-        <div class="form-group">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" value="seuemail@exemplo.com" required>
-        </div>
+      <!-- ===== PAINEL: EDITAR PERFIL ===== -->
+      <div id="panel-edit" class="profile-panel">
 
-        <!-- Nova Senha -->
-        <div class="form-group">
-          <label for="nova-senha">Nova Senha (opcional)</label>
-          <input type="password" id="nova-senha" name="nova-senha" placeholder="Digite a nova senha">
-        </div>
+        <form action="" method="POST" enctype="multipart/form-data">
 
-        <p class="divider">Confirmação de Segurança</p>
+          <div class="profile-upload">
+            <div class="avatar-preview" id="avatarPreview">👤</div>
+            <div>
+              <label for="foto" class="file-input-label">Alterar Foto de Perfil</label>
+              <input type="file" id="foto" name="foto" accept="image/*">
+            </div>
+          </div>
 
-        <!-- Senha Atual (Obrigatória para alterar) -->
-        <div class="form-group">
-          <label for="senha-atual">Senha Atual</label>
-          <input type="password" id="senha-atual" name="senha-atual" placeholder="Digite sua senha atual para salvar" required>
-        </div>
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome completo">
+          </div>
 
-        <button type="submit" class="btn-submit">Salvar Alterações</button>
+          <div class="form-group">
+            <label for="nickname">Nickname</label>
+            <input type="text" id="nickname" name="nickname" placeholder="Como quer ser chamado(a)">
+          </div>
 
-      </form>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="nova-senha">Nova Senha (opcional)</label>
+            <input type="password" id="nova-senha" name="nova-senha" placeholder="Digite a nova senha">
+          </div>
+
+          <p class="divider">Confirmação de Segurança</p>
+
+          <div class="form-group">
+            <label for="senha-atual">Senha Atual</label>
+            <input type="password" id="senha-atual" name="senha-atual" placeholder="Digite sua senha atual para salvar" required>
+          </div>
+
+          <button type="submit" class="btn-action">Salvar Alterações</button>
+
+        </form>
+      </div>
+
     </div>
-
   </main>
 
   <script>
-    // Animação da estrela
+    // ── Alternância de abas ──────────────────────────────────────
+    function switchProfileTab(panelId, btn) {
+      document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.profile-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + panelId).classList.add('active');
+      btn.classList.add('active');
+      if (panelId === 'view') refreshProfileView();
+    }
+
+    // ── Dados do perfil (simulado; no Flask virá do servidor) ────
+    const profile = JSON.parse(localStorage.getItem('lumina_profile') || 'null') || {
+      name: 'Seu Nome',
+      nickname: 'seunickname',
+      email: 'seuemail@exemplo.com',
+      photo: null
+    };
+
+    // ── Streak / Sequência ───────────────────────────────────────
+    function loadStreak() {
+      return JSON.parse(localStorage.getItem('lumina_streak') || 'null') || {
+        current: 0,
+        best: 0,
+        total: 0,
+        lastDate: null,
+        weekDone: []          // array de datas ISO dos últimos 7 dias com check-in
+      };
+    }
+
+    function saveStreak(s) { localStorage.setItem('lumina_streak', JSON.stringify(s)); }
+
+    function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+    function doCheckIn() {
+      const s = loadStreak();
+      const today = todayISO();
+      if (s.lastDate === today) { alert('Você já marcou o acesso de hoje! 🎉'); return; }
+
+      // Calcula sequência
+      const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayISO = yesterday.toISOString().slice(0, 10);
+      s.current = (s.lastDate === yesterdayISO) ? s.current + 1 : 1;
+      s.best = Math.max(s.best, s.current);
+      s.total += 1;
+      s.lastDate = today;
+
+      // Mantém só os últimos 7 dias únicos
+      if (!s.weekDone.includes(today)) s.weekDone.push(today);
+      const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 6);
+      const cutoffISO = cutoff.toISOString().slice(0, 10);
+      s.weekDone = s.weekDone.filter(d => d >= cutoffISO);
+
+      saveStreak(s);
+      refreshProfileView();
+      document.getElementById('checkInBtn').textContent = '✓ Acesso marcado!';
+      document.getElementById('checkInBtn').disabled = true;
+      document.getElementById('checkInBtn').style.opacity = '0.6';
+    }
+
+    // ── Barra semanal ────────────────────────────────────────────
+    const DAYS_PT = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+    function buildWeekBar(weekDone) {
+      const container = document.getElementById('weekDays');
+      container.innerHTML = '';
+      const today = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today); d.setDate(today.getDate() - i);
+        const iso = d.toISOString().slice(0, 10);
+        const isDone = weekDone.includes(iso);
+        const isToday = i === 0;
+        const div = document.createElement('div');
+        div.className = 'streak-day';
+        div.innerHTML = `
+          <div class="streak-day-label">${DAYS_PT[d.getDay()]}</div>
+          <div class="streak-day-circle ${isDone ? 'done' : ''} ${isToday && !isDone ? 'today-circle' : ''}">
+            ${isDone ? '✓' : (isToday ? '·' : '')}
+          </div>`;
+        container.appendChild(div);
+      }
+    }
+
+    // ── Atualizar visualização ───────────────────────────────────
+    function refreshProfileView() {
+      const s = loadStreak();
+      document.getElementById('streakCount').textContent = s.current;
+      document.getElementById('streakBest').textContent = s.best;
+      document.getElementById('totalDays').textContent = s.total;
+      buildWeekBar(s.weekDone);
+
+      // Nome / nickname / email
+      document.getElementById('displayName').textContent = profile.name;
+      document.getElementById('displayNickname').textContent = '@' + profile.nickname;
+      document.getElementById('displayEmail').textContent = profile.email;
+      if (profile.photo) {
+        document.getElementById('profileAvatarLg').innerHTML = `<img src="${profile.photo}" alt="Foto">`;
+      }
+
+      // Botão de check-in
+      const btn = document.getElementById('checkInBtn');
+      if (s.lastDate === todayISO()) {
+        btn.textContent = '✓ Acesso já marcado hoje!';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+      } else {
+        btn.textContent = '✓ Marcar acesso de hoje';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    }
+
+    // ── Preview foto ao editar ───────────────────────────────────
+    document.getElementById('foto').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        document.getElementById('avatarPreview').innerHTML = `<img src="${evt.target.result}" alt="Foto">`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ── Animação estrela ─────────────────────────────────────────
     const star = document.getElementById('star');
     star.addEventListener('click', () => {
       star.classList.add('spin');
-      star.addEventListener('animationend', () => {
-        star.classList.remove('spin');
-      }, { once: true });
+      star.addEventListener('animationend', () => star.classList.remove('spin'), { once: true });
     });
 
-    // Preview da foto de perfil ao escolher um arquivo
-    const fotoInput = document.getElementById('foto');
-    const avatarPreview = document.getElementById('avatarPreview');
-
-    fotoInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          avatarPreview.innerHTML = `<img src="${evt.target.result}" alt="Foto de Perfil">`;
-        }
-        reader.readAsDataURL(file);
-      }
-    });
+    // ── Init ─────────────────────────────────────────────────────
+    refreshProfileView();
   </script>
 
 </body>

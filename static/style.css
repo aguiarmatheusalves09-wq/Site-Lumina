@@ -1,5 +1,14 @@
 /* ==========================================================================
-   1. BASE GLOBAL (PRA TODOS)
+   LUMINA - style.css (único para todas as páginas)
+
+   Como usar:
+   - Cada página tem uma classe no <body> (page-index, page-auth, page-home...)
+   - O <main> usa .main-container + um modificador de largura (.main-sm, .main-md, .main-xl)
+   - Cards usam .card (+ classe específica quando precisa)
+   ========================================================================== */
+
+/* ==========================================================================
+   1. BASE
    ========================================================================== */
 * {
   margin: 0;
@@ -9,10 +18,11 @@
 
 :root {
   --bg-color: #2e2854;      /* Roxo escuro */
-  --card-bg: #fff8e7;        /* Bege claro */
-  --card-shadow: #c8bdab;    /* Sombra bege */
+  --card-bg: #fff8e7;       /* Bege claro */
+  --card-shadow: #c8bdab;   /* Sombra bege */
   --text-color: #2e2854;    /* Cor do texto */
-  --stripe-color: #3b3469;  /* Cor da faixa da Home */
+  --stripe-color: #3b3469;  /* Faixa da Home */
+  --error-color: #d9534f;   /* Mensagens de erro */
 }
 
 body {
@@ -27,8 +37,26 @@ body {
   overflow-x: hidden;
 }
 
+.hidden { display: none; }
+
+/* Variações de página (classe no <body>) */
+body.page-index {
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+  justify-content: space-between;
+  padding-bottom: 0;
+}
+
+body.page-auth {
+  justify-content: space-between;
+  color: var(--card-bg);
+}
+
+body.page-home { padding-bottom: 0; }
+
 /* ==========================================================================
-   2. CABEÇALHO E ESTRELAAAAAAAAA
+   2. CABEÇALHO E ESTRELA
    ========================================================================== */
 .header {
   display: flex;
@@ -37,6 +65,9 @@ body {
   padding: 2rem 3rem;
   z-index: 10;
 }
+
+.header-between { justify-content: space-between; }
+.header-end { justify-content: flex-end; }
 
 .logo-link {
   font-family: 'Pacifico', cursive;
@@ -47,9 +78,9 @@ body {
   transition: opacity 0.2s ease;
 }
 
-.logo-link:hover {
-  opacity: 0.9;
-}
+.logo-link:hover { opacity: 0.9; }
+
+.star-link { text-decoration: none; }
 
 .star-icon {
   position: absolute;
@@ -63,6 +94,16 @@ body {
   z-index: 10;
 }
 
+/* Estrela no canto inferior esquerdo (index, login, cadastro) */
+.star-icon.star-bottom {
+  top: auto;
+  right: auto;
+  bottom: 2rem;
+  left: 2rem;
+}
+
+body.page-auth .star-icon.star-bottom { position: fixed; }
+
 @keyframes spinAnimation {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -73,7 +114,196 @@ body {
 }
 
 /* ==========================================================================
-   3. HOME (HOME.HTML)
+   3. LAYOUT (main + cards)
+   ========================================================================== */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  padding: 1rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  z-index: 2;
+}
+
+.main-sm { max-width: 650px; }                 /* login, cadastro, config, desafios */
+.main-md { max-width: 900px; }                 /* matérias */
+.main-xl { max-width: 1200px; padding: 2rem; } /* sobre */
+.main-top { justify-content: flex-start; }     /* matérias, rotina */
+.main-home { padding: 3rem 2rem; }             /* home */
+
+.main-index {                                  /* index */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  transform: translateY(-20px);
+}
+
+.card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  width: 100%;
+  padding: 2.5rem 2rem;
+  border-radius: 24px;
+  box-shadow: 6px 8px 0px var(--card-shadow);
+}
+
+.config-card { padding: 2.5rem; }
+
+.card-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(46, 40, 84, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.card-title.center { text-align: center; }
+.config-card .card-title { font-size: 2.2rem; }
+
+/* ==========================================================================
+   4. BOTÕES
+   ========================================================================== */
+.btn {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  text-decoration: none;
+  border: none;
+  border-radius: 16px;
+  font-family: inherit;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 4px 6px 0px var(--card-shadow);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  cursor: pointer;
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 2px 0px var(--card-shadow);
+}
+
+.btn-sm {
+  padding: 0.6rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  box-shadow: 3px 4px 0px var(--card-shadow);
+}
+
+.btn-lg {
+  padding: 1.2rem 4rem;
+  font-size: 2.2rem;
+  border-radius: 20px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.4rem;
+  margin-top: 1rem;
+  box-shadow: 4px 5px 0px var(--card-shadow);
+}
+
+/* Botões escuros (dentro de cards) */
+.btn-action,
+.save-btn {
+  background-color: var(--text-color);
+  color: var(--card-bg);
+  border: none;
+  border-radius: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 4px 5px 0px var(--card-shadow);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-action:active,
+.save-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 2px 0px var(--card-shadow);
+}
+
+.btn-action {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.3rem;
+  margin-top: 1rem;
+}
+
+.save-btn {
+  padding: 0.9rem 2.5rem;
+  font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   5. FORMULÁRIOS
+   ========================================================================== */
+.header-text {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header-text h1 {
+  font-size: 3rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.header-text p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 2px solid var(--text-color);
+  background-color: transparent;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1rem;
+  color: var(--text-color);
+  outline: none;
+}
+
+.form-group select { cursor: pointer; }
+
+.form-group input:focus {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.form-error,
+.feedback-msg {
+  color: var(--error-color);
+  font-weight: 600;
+  text-align: center;
+}
+
+.form-error { margin-bottom: 1rem; }
+.feedback-msg { margin-top: 1rem; }
+
+/* ==========================================================================
+   6. HOME
    ========================================================================== */
 .hero-section {
   position: relative;
@@ -156,7 +386,18 @@ body {
 }
 
 /* ==========================================================================
-   4. SOBRE (SOBRE.HTML)
+   7. INDEX
+   ========================================================================== */
+.logo-img {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+  user-select: none;
+}
+
+/* ==========================================================================
+   8. SOBRE
    ========================================================================== */
 .cards-grid {
   display: flex;
@@ -168,17 +409,14 @@ body {
 }
 
 .about-card {
-  background-color: var(--card-bg);
   flex: 1;
   min-width: 280px;
-  padding: 2.5rem 2rem;
-  border-radius: 24px;
-  box-shadow: 6px 8px 0px var(--card-shadow);
   display: flex;
   flex-direction: column;
 }
 
-.about-card h1, .about-card h2 {
+.about-card h1,
+.about-card h2 {
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.2rem;
@@ -193,6 +431,8 @@ body {
   font-weight: 400;
 }
 
+.about-card p:last-of-type { margin-bottom: 0; }
+
 .version-tag {
   display: inline-block;
   margin-top: auto;
@@ -205,15 +445,9 @@ body {
 }
 
 /* ==========================================================================
-   5. ROTINA (ROTINA.HTML)
+   9. ROTINA
    ========================================================================== */
-.routine-card {
-  background-color: var(--card-bg);
-  width: 100%;
-  padding: 2.5rem 2rem;
-  border-radius: 24px;
-  box-shadow: 6px 8px 0px var(--card-shadow);
-}
+.routine-card { padding: 2rem; }
 
 .tabs-container {
   display: flex;
@@ -245,155 +479,231 @@ body {
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-.weekly-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 1rem;
+/* --- Calendário Mensal --- */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
 }
 
-.day-column {
-  background-color: rgba(46, 40, 84, 0.05);
-  border-radius: 16px;
-  padding: 1rem 0.8rem;
-  border: 2px solid var(--text-color);
-}
-
-.day-column h3 {
-  text-align: center;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  border-bottom: 2px solid var(--text-color);
-  padding-bottom: 0.4rem;
-}
-
-.time-slot { margin-bottom: 0.8rem; }
-.time-slot label {
-  display: block;
-  font-size: 0.85rem;
+.calendar-header h2 {
+  font-size: 1.4rem;
   font-weight: 600;
-  margin-bottom: 0.2rem;
-  opacity: 0.8;
+  text-transform: capitalize;
 }
 
-.time-slot textarea {
-  width: 100%;
-  height: 60px;
-  border-radius: 8px;
-  border: 1px solid var(--text-color);
-  background-color: transparent;
-  padding: 0.4rem;
-  font-family: 'Fredoka', sans-serif;
-  font-size: 0.85rem;
-  resize: none;
-  outline: none;
-  color: var(--text-color);
-}
-
-.monthly-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 0.8rem;
-}
-
-.month-day {
-  background-color: rgba(46, 40, 84, 0.05);
+.cal-nav-btn {
+  background: transparent;
   border: 2px solid var(--text-color);
+  color: var(--text-color);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  transition: all 0.15s ease;
+}
+
+.cal-nav-btn:hover {
+  background-color: var(--text-color);
+  color: var(--card-bg);
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.cal-weekday {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.55;
+  padding: 0.3rem 0;
+  text-transform: uppercase;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+}
+
+.cal-day {
+  aspect-ratio: 1;
   border-radius: 12px;
-  padding: 0.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.month-day span {
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 0.4rem;
-}
-
-.month-day select {
-  width: 100%;
-  padding: 0.4rem;
-  border-radius: 8px;
-  border: 1px solid var(--text-color);
-  background-color: transparent;
-  font-family: 'Fredoka', sans-serif;
-  font-size: 0.85rem;
-  color: var(--text-color);
-  outline: none;
+  justify-content: flex-start;
+  padding: 0.4rem 0.2rem 0.2rem;
   cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.15s ease;
+  min-height: 52px;
+  position: relative;
+  background-color: rgba(46, 40, 84, 0.04);
+}
+
+.cal-day:hover { border-color: rgba(46, 40, 84, 0.3); background-color: rgba(46, 40, 84, 0.08); }
+
+.cal-day.empty { cursor: default; background: transparent; }
+.cal-day.empty:hover { border-color: transparent; background: transparent; }
+
+.cal-day.today {
+  border-color: var(--text-color);
+  background-color: rgba(46, 40, 84, 0.1);
+}
+
+.cal-day.selected {
+  background-color: var(--text-color);
+  color: var(--card-bg);
+  border-color: var(--text-color);
+  box-shadow: 3px 4px 0px var(--card-shadow);
+}
+
+.cal-day-num {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.cal-day-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--text-color);
+  margin-top: 4px;
+  opacity: 0.5;
+}
+
+.cal-day.selected .cal-day-dot { background-color: var(--card-bg); opacity: 0.8; }
+
+/* --- Painel lateral do dia --- */
+.routine-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.day-panel {
+  background-color: rgba(46, 40, 84, 0.05);
+  border: 2px solid var(--text-color);
+  border-radius: 18px;
+  padding: 1.4rem;
+}
+
+.day-panel-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.day-panel-title span { opacity: 0.6; font-size: 0.95rem; font-weight: 400; }
+
+.period-block { margin-bottom: 1rem; }
+
+.period-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.55;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.period-label::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-color);
+  opacity: 0.4;
+}
+
+.period-block textarea {
+  width: 100%;
+  height: 64px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(46, 40, 84, 0.25);
+  background-color: white;
+  padding: 0.5rem 0.7rem;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 0.95rem;
+  resize: none;
+  outline: none;
+  color: var(--text-color);
+  transition: border-color 0.2s;
+}
+
+.period-block textarea:focus { border-color: var(--text-color); }
+
+/* Legenda de matéria do dia no grid */
+.cal-day-subj {
+  font-size: 0.6rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  opacity: 0.75;
+}
+
+.cal-day.selected .cal-day-subj { opacity: 1; color: var(--card-bg); }
+
+.subject-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.subject-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  border: 2px solid var(--text-color);
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  font-family: 'Fredoka', sans-serif;
+  transition: all 0.15s ease;
+}
+
+.subject-badge.active {
+  background-color: var(--text-color);
+  color: var(--card-bg);
 }
 
 .action-container {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: flex-end;
 }
 
-.save-btn {
-  background-color: var(--text-color);
-  color: var(--card-bg);
-  border: none;
-  padding: 0.9rem 2.5rem;
-  border-radius: 16px;
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: 4px 5px 0px var(--card-shadow);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.save-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 2px 0px var(--card-shadow);
-}
-
 /* ==========================================================================
-   6. DESAFIOS (DESAFIOS.HTML)
+   10. DESAFIOS
    ========================================================================== */
-.challenge-card {
-  background-color: var(--card-bg);
-  width: 100%;
-  padding: 2.5rem 2rem;
-  border-radius: 24px;
-  box-shadow: 6px 8px 0px var(--card-shadow);
-}
-
-.challenge-card h1 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(46, 40, 84, 0.2);
-  padding-bottom: 0.5rem;
-  text-align: center;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.2rem;
-}
-
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  font-size: 1rem;
-}
-
-.form-group select {
-  padding: 0.8rem 1rem;
-  border-radius: 12px;
-  border: 2px solid var(--text-color);
-  background-color: transparent;
-  font-family: 'Fredoka', sans-serif;
-  font-size: 1rem;
-  color: var(--text-color);
-  outline: none;
-  cursor: pointer;
-}
-
 .question-box { margin-bottom: 1.5rem; }
+
 .question-text {
   font-size: 1.2rem;
   font-weight: 600;
@@ -420,14 +730,12 @@ body {
   transition: background-color 0.2s ease;
 }
 
-.option-btn:hover {
-  background-color: rgba(46, 40, 84, 0.1);
-}
+.option-btn:hover { background-color: rgba(46, 40, 84, 0.1); }
 
 .congrats-box { text-align: center; }
+
 .congrats-box h2 {
   font-size: 2.5rem;
-  color: var(--text-color);
   margin-bottom: 1rem;
 }
 
@@ -436,45 +744,9 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.btn-action {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1.3rem;
-  border-radius: 16px;
-  margin-top: 1rem;
-  background-color: var(--text-color);
-  color: var(--card-bg);
-  border: none;
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 4px 5px 0px var(--card-shadow);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.btn-action:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 2px 0px var(--card-shadow);
-}
-
-.feedback-msg {
-  margin-top: 1rem;
-  color: #d9534f;
-  font-weight: 600;
-  text-align: center;
-}
-
 /* ==========================================================================
-   7. MATÉRIAS (MATERIAS.HTML)
+   11. MATÉRIAS
    ========================================================================== */
-.subjects-card {
-  background-color: var(--card-bg);
-  width: 100%;
-  padding: 2.5rem 2rem;
-  border-radius: 24px;
-  box-shadow: 6px 8px 0px var(--card-shadow);
-}
-
 .subject-selector {
   display: flex;
   gap: 0.8rem;
@@ -543,7 +815,20 @@ body {
   margin-bottom: 1.5rem;
 }
 
-/* Card de Thumbnail do Vídeo */
+.video-placeholder {
+  width: 100%;
+  height: 320px;
+  background-color: rgba(46, 40, 84, 0.15);
+  border: 2px dashed var(--text-color);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
 .video-thumbnail-card {
   position: relative;
   display: block;
@@ -579,21 +864,6 @@ body {
   transition: background 0.3s ease;
 }
 
-.play-button {
-  width: 60px;
-  height: 60px;
-  background-color: var(--card-bg);
-  color: var(--text-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  padding-left: 4px; /* Ajuste visual do ícone de play */
-  box-shadow: 2px 4px 0px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease;
-}
-
 .play-overlay span {
   color: var(--card-bg);
   font-weight: 600;
@@ -601,54 +871,269 @@ body {
   text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-.video-thumbnail-card:hover img {
-  transform: scale(1.03);
-}
-
-.video-thumbnail-card:hover .play-overlay {
-  background: rgba(46, 40, 84, 0.25);
-}
-
-.video-thumbnail-card:hover .play-button {
-  transform: scale(1.1);
-}
+.video-thumbnail-card:hover img { transform: scale(1.03); }
+.video-thumbnail-card:hover .play-overlay { background: rgba(46, 40, 84, 0.25); }
 
 /* ==========================================================================
-   8. LAYOUTS CONTAINERS E riCARDOS
+   12. CONFIGURAÇÕES / PERFIL
    ========================================================================== */
-.main-container {
+
+/* Tabs de perfil/edição */
+.profile-tabs {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba(46, 40, 84, 0.15);
+  padding-bottom: 1rem;
+}
+
+.profile-tab-btn {
+  background: transparent;
+  border: 2px solid var(--text-color);
+  color: var(--text-color);
+  padding: 0.5rem 1.4rem;
+  border-radius: 12px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.profile-tab-btn.active {
+  background-color: var(--text-color);
+  color: var(--card-bg);
+  box-shadow: 3px 4px 0px var(--card-shadow);
+}
+
+.profile-panel { display: none; }
+.profile-panel.active { display: block; }
+
+/* --- Seção de visualização do perfil --- */
+.profile-view {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-  padding: 1rem 2rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  width: 100%;
-  z-index: 2;
+  gap: 1.5rem;
 }
 
+.profile-avatar-lg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: rgba(46, 40, 84, 0.1);
+  border: 3px solid var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  overflow: hidden;
+  box-shadow: 4px 5px 0px var(--card-shadow);
+}
+
+.profile-avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
+
+.profile-info { text-align: center; }
+
+.profile-name {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.profile-nickname {
+  font-size: 1.1rem;
+  opacity: 0.6;
+  margin-top: 0.2rem;
+}
+
+.profile-email {
+  font-size: 0.95rem;
+  opacity: 0.55;
+  margin-top: 0.4rem;
+}
+
+/* Streak / Sequência */
+.streak-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.streak-card {
+  flex: 1;
+  background-color: rgba(46, 40, 84, 0.07);
+  border: 2px solid var(--text-color);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.streak-icon { font-size: 1.8rem; line-height: 1; }
+
+.streak-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.streak-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.55;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+/* Barra de sequência semanal */
+.streak-week {
+  width: 100%;
+  background-color: rgba(46, 40, 84, 0.07);
+  border: 2px solid var(--text-color);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+}
+
+.streak-week-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.55;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.8rem;
+}
+
+.streak-days {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.streak-day {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.streak-day-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.5;
+  text-transform: uppercase;
+}
+
+.streak-day-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(46, 40, 84, 0.2);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.streak-day-circle.done {
+  background-color: var(--text-color);
+  border-color: var(--text-color);
+  color: var(--card-bg);
+}
+
+.streak-day-circle.today-circle {
+  border-color: var(--text-color);
+  border-width: 2px;
+  font-weight: 700;
+}
+
+/* --- Seção de edição --- */
+.profile-upload {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.8rem;
+}
+
+.avatar-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(46, 40, 84, 0.1);
+  border: 2px dashed var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  overflow: hidden;
+}
+
+.avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+.file-input-label {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.file-input-label:hover { background-color: rgba(46, 40, 84, 0.1); }
+
+input[type="file"] { display: none; }
+
+.divider {
+  margin: 1.5rem 0 1rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   13. RESPONSIVIDADE (sempre por último)
+   ========================================================================== */
 @media (max-width: 950px) {
   .cards-grid {
     flex-direction: column;
     align-items: center;
+  }
+
+  .about-card {
+    width: 100%;
+    max-width: 600px;
   }
 }
 
 @media (max-width: 768px) {
   .hero-title { font-size: 4rem; }
   .hero-stripe { left: 10%; height: 90px; }
-  .weekly-grid { grid-template-columns: 1fr; }
   .tabs-container { flex-direction: column; }
   .action-container { justify-content: center; }
   .save-btn { width: 100%; }
+  .star-icon:not(.star-bottom) { top: 1.5rem; right: 1.5rem; }
+  .routine-layout { grid-template-columns: 1fr; }
+  .streak-row { flex-direction: column; }
 }
 
 @media (max-width: 600px) {
-  .star-icon { top: 1.5rem; right: 1.5rem; }
-  .about-card, .routine-card, .challenge-card, .subjects-card {
-    padding: 1.8rem 1.2rem;
-  }
+  .card { padding: 1.8rem 1.2rem; }
+  .header-text h1 { font-size: 2.2rem; }
+  .header-text p { font-size: 1rem; }
   .video-placeholder { height: 200px; }
+  .profile-upload {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
