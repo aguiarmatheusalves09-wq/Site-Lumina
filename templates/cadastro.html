@@ -28,7 +28,13 @@
     </div>
 
     <div class="card">
-      <form action="{{ url_for('cadastro') }}" method="POST">
+      <form action="{{ cadastro_path }}" method="POST">
+
+        {% if erro_cadastro %}
+          <div class="form-error">
+            {{ erro_cadastro }}
+          </div>
+        {% endif %}
 
         <div class="form-group">
           <label for="nome">Nome</label>

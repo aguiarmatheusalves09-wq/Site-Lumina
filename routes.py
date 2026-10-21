@@ -52,7 +52,7 @@ def cadastro():
                            inicio_path=inicio_url,
                            logo_path=logo_,
                            login_path=login_url,
-                           erro_email="Email inválido!")
+                           erro_cadastro="Email inválido!")
 
         elif db.session.query(Usuarios).filter(Usuarios.email == email).first():
             return render_template('cadastro.html', 
@@ -104,7 +104,7 @@ def login():
                            login_path=login_url,
                            cadastro_path=cadastro_url,
                             home_path=home_url,
-                           erro_login="Email ou senha incorretos!")
+                           erro_login="E-mail ou senha incorretos!")
 
 @app.route("/home")
 def principal_home():
@@ -187,7 +187,6 @@ def sobre():
 @app.route("/configuracao")
 def configuracao():
     home_url = url_for('principal_home')
-    config_url = url_for('configuracao')
 
     logo_ = url_for('static', filename='imagens/logo.png')
     css_ = url_for('static', filename='style.css')
@@ -195,8 +194,7 @@ def configuracao():
     return render_template('config.html', 
                            css_path=css_, 
                            logo_path=logo_,
-                           home_path=home_url,
-                           config_path=config_url)
+                           home_path=home_url)
 
 
 #@app.route("/usuarios/<nome_usuario>")
