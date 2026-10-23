@@ -1,8 +1,6 @@
 #Rotas para as páginas
-from textwrap import wrap
 
 from flask import render_template, request, url_for, redirect
-from functools import wraps
 from sqlalchemy import or_
 import re
 from main import app
@@ -52,25 +50,30 @@ def cadastro():
     nickname = request.form.get("nickname")
 
     if not validar_email(email):
-        return cadastro(erro_cadastro="Email inválido!")
+        return render_template('cadastro.html',
+                                css_path=css_,
+                                inicio_path=inicio_url,
+                                logo_path=logo_,
+                                login_path=login_url,
+                                erro_cadastro="Email inválido!")
 
     if db.session.query(Usuarios).filter(Usuarios.email == email).first():
-        return cadastro(erro_cadastro="Usuário já cadastrado!")
-
-    if db.session.query(Usuarios).filter(Usuarios.nickname == nickname).first():
-        return cadastro(erro_cadastro="Nickname já está em uso!")
+        return render_template('cadastro.html',
+                                        css_path=css_,
+                                        inicio_path=inicio_url,
+                                        logo_path=logo_,
+                                        login_path=login_url,
+                                        erro_cadastro="Usuário já cadastrado!")
 
     novo_usuario = Usuarios(
         email=email,
-        senha=senha,  # nunca salve a senha pura
+        senha=senha,  
         nome=nome,
         nickname=nickname,
     )
     db.session.add(novo_usuario)
     db.session.commit()
 
-    # Já deixa o usuário logado depois de cadastrar
-    db.session["usuario_email"] = novo_usuario.email
     return redirect(url_for('principal_home'))
         
 @app.route("/login", methods=["GET", "POST"])
