@@ -1,10 +1,20 @@
 #Rotas para as páginas
+from textwrap import wrap
+
 from flask import render_template, request, url_for, redirect
+from functools import wraps
 from sqlalchemy import or_
 import re
 from main import app
 from db import db
 from models import Usuarios
+
+def validar_email(email):
+    padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if re.match(padrao, email):
+        return True
+    return False
+    
 
 @app.route("/")
 def home():
@@ -37,36 +47,31 @@ def cadastro():
                            login_path=login_url)
     elif request.method == "POST":
         nome = request.form.get("nome")
-        email = request.form.get("email")
-        senha = request.form.get("senha")
-        nickname = request.form.get("nickname")
+    email = request.form.get("email")
+    senha = request.form.get("senha")
+    nickname = request.form.get("nickname")
 
-        novo_usuario = Usuarios(email=email, senha=senha, nome=nome, nickname=nickname)
-        def validar_email(email):
-            padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-            return bool(re.fullmatch(padrao, email))
+    if not validar_email(email):
+        return cadastro(erro_cadastro="Email inválido!")
 
-        if not validar_email(email):
-            return render_template('cadastro.html', 
-                           css_path=css_,
-                           inicio_path=inicio_url,
-                           logo_path=logo_,
-                           login_path=login_url,
-                           erro_cadastro="Email inválido!")
+    if db.session.query(Usuarios).filter(Usuarios.email == email).first():
+        return cadastro(erro_cadastro="Usuário já cadastrado!")
 
-        elif db.session.query(Usuarios).filter(Usuarios.email == email).first():
-            return render_template('cadastro.html', 
-                           css_path=css_,
-                           inicio_path=inicio_url,
-                           logo_path=logo_,
-                           login_path=login_url,
-                           erro_cadastro="Usuário já cadastrado!")
+    if db.session.query(Usuarios).filter(Usuarios.nickname == nickname).first():
+        return cadastro(erro_cadastro="Nickname já está em uso!")
 
-        else:
-            db.session.add(novo_usuario)
-            db.session.commit()
+    novo_usuario = Usuarios(
+        email=email,
+        senha=senha,  # nunca salve a senha pura
+        nome=nome,
+        nickname=nickname,
+    )
+    db.session.add(novo_usuario)
+    db.session.commit()
 
-            return redirect(url_for('principal_home'))
+    # Já deixa o usuário logado depois de cadastrar
+    db.session["usuario_email"] = novo_usuario.email
+    return redirect(url_for('principal_home'))
         
 @app.route("/login", methods=["GET", "POST"])
 def login():
