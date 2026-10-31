@@ -107,7 +107,7 @@ def login():
         usuario = db.session.query(Usuarios).filter(Usuarios.email == login_usuario).first()
 
         if usuario is not None and usuario.senha == login_senha:
-            session['email_usuario'] = login_usuario  # Store email in session
+            session['email_usuario'] = login_usuario  
             return redirect(url_for('principal_home')) 
         else:
             return render_template('login.html', 
@@ -135,6 +135,7 @@ def principal_home():
 
     email_usuario = session.get('email_usuario')
     usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
+
     if not usuario:
         return redirect(url_for('home'))
 
@@ -159,14 +160,16 @@ def rotina():
     email_usuario = session.get('email_usuario')
     usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
 
+    if usuario is None:
+        return redirect(url_for('home'))
+
     return render_template('rotina.html', 
                            css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url,
                            config_path=config_url,
                            email_usuario=email_usuario)
-    if usuario is None:
-        return redirect(url_for('home'))
+    
 
     return render_template('rotina.html', 
                            css_path=css_, 
@@ -188,6 +191,9 @@ def materias():
     email_usuario = session.get('email_usuario')
     usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
 
+    if usuario is None:
+        return redirect(url_for('home'))
+
     return render_template('materias.html', 
                            css_path=css_, 
                            logo_path=logo_,
@@ -205,6 +211,9 @@ def desafios():
     email_usuario = session.get('email_usuario')
     usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
 
+    if usuario is None:
+        return redirect(url_for('home'))
+
     return render_template('desafios.html', 
                            css_path=css_, 
                            logo_path=logo_,
@@ -221,6 +230,9 @@ def sobre():
 
     email_usuario = session.get('email_usuario')
     usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
+
+    if usuario is None:
+        return redirect(url_for('home'))
 
     return render_template('sobre.html', 
                            css_path=css_, 
