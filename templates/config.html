@@ -33,9 +33,9 @@
           <div class="profile-avatar-lg" id="profileAvatarLg">👤</div>
 
           <div class="profile-info">
-            <div class="profile-name" id="displayName">Seu Nome</div>
-            <div class="profile-nickname" id="displayNickname">@seunickname</div>
-            <div class="profile-email" id="displayEmail">seuemail@exemplo.com</div>
+            <div class="profile-name" id="displayName">{{ nome_usuario }}</div>
+            <div class="profile-nickname" id="displayNickname">{{ nickname_usuario }}</div>
+            <div class="profile-email" id="displayEmail">{{ email_usuario }}</div>
           </div>
 
           <!-- Sequência + Recordes -->
@@ -131,9 +131,9 @@
 
     // ── Dados do perfil (simulado; no Flask virá do servidor) ────
     const profile = JSON.parse(localStorage.getItem('lumina_profile') || 'null') || {
-      name: 'Seu Nome',
-      nickname: 'seunickname',
-      email: 'seuemail@exemplo.com',
+      name: document.getElementById('displayName').textContent.trim(),
+      nickname: document.getElementById('displayNickname').textContent.trim(),
+      email: document.getElementById('displayEmail').textContent.trim(),
       photo: null
     };
 

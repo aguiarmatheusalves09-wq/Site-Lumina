@@ -1,18 +1,21 @@
 #Rotas para as páginas
 
-from flask import render_template, request, url_for, redirect
+from flask import render_template, request, url_for, redirect, session
 from sqlalchemy import or_
 import re
 from main import app
 from db import db
 from models import Usuarios
 
+email_usuario = None  
+
+app.secret_key = 'your_secret_key'  # Add a secret key for session management
+
 def validar_email(email):
     padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if re.match(padrao, email):
         return True
     return False
-    
 
 @app.route("/")
 def home():
@@ -45,36 +48,37 @@ def cadastro():
                            login_path=login_url)
     elif request.method == "POST":
         nome = request.form.get("nome")
-    email = request.form.get("email")
-    senha = request.form.get("senha")
-    nickname = request.form.get("nickname")
+        email = request.form.get("email")
+        senha = request.form.get("senha")
+        nickname = request.form.get("nickname")
 
-    if not validar_email(email):
-        return render_template('cadastro.html',
-                                css_path=css_,
-                                inicio_path=inicio_url,
-                                logo_path=logo_,
-                                login_path=login_url,
-                                erro_cadastro="Email inválido!")
+        if not validar_email(email):
+            return render_template('cadastro.html',
+                                    css_path=css_,
+                                    inicio_path=inicio_url,
+                                    logo_path=logo_,
+                                    login_path=login_url,
+                                    erro_cadastro="Email inválido!")
 
-    if db.session.query(Usuarios).filter(Usuarios.email == email).first():
-        return render_template('cadastro.html',
-                                        css_path=css_,
-                                        inicio_path=inicio_url,
-                                        logo_path=logo_,
-                                        login_path=login_url,
-                                        erro_cadastro="Usuário já cadastrado!")
+        if db.session.query(Usuarios).filter(Usuarios.email == email).first():
+            return render_template('cadastro.html',
+                                   css_path=css_,
+                                   inicio_path=inicio_url,
+                                   logo_path=logo_,
+                                   login_path=login_url,
+                                   erro_cadastro="Usuário já cadastrado!")
 
-    novo_usuario = Usuarios(
-        email=email,
-        senha=senha,  
-        nome=nome,
-        nickname=nickname,
-    )
-    db.session.add(novo_usuario)
-    db.session.commit()
+        novo_usuario = Usuarios(
+            email=email,
+            senha=senha,  
+            nome=nome,
+            nickname=nickname,
+        )
+        db.session.add(novo_usuario)
+        db.session.commit()
+        session['email_usuario'] = email  # Store email in session
 
-    return redirect(url_for('principal_home'))
+        return redirect(url_for('principal_home'))
         
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -102,7 +106,8 @@ def login():
 
         usuario = db.session.query(Usuarios).filter(Usuarios.email == login_usuario).first()
 
-        if usuario and usuario.senha == login_senha:
+        if usuario is not None and usuario.senha == login_senha:
+            session['email_usuario'] = login_usuario  # Store email in session
             return redirect(url_for('principal_home')) 
         else:
             return render_template('login.html', 
@@ -111,8 +116,10 @@ def login():
                            logo_path=logo_,
                            login_path=login_url,
                            cadastro_path=cadastro_url,
-                            home_path=home_url,
+                           home_path=home_url,
                            erro_login="E-mail ou senha incorretos!")
+
+    return redirect(url_for('home'))
 
 @app.route("/home")
 def principal_home():
@@ -125,6 +132,11 @@ def principal_home():
 
     logo_ = url_for('static', filename='imagens/logo.png')
     css_ = url_for('static', filename='style.css')
+
+    email_usuario = session.get('email_usuario')
+    usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
+    if not usuario:
+        return redirect(url_for('home'))
 
     return render_template('home.html', 
                            css_path=css_, 
@@ -144,11 +156,26 @@ def rotina():
     logo_ = url_for('static', filename='imagens/logo.png')
     css_ = url_for('static', filename='style.css')
 
+    email_usuario = session.get('email_usuario')
+    usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
+
     return render_template('rotina.html', 
                            css_path=css_, 
                            logo_path=logo_,
                            home_path=home_url,
-                           config_path=config_url)
+                           config_path=config_url,
+                           email_usuario=email_usuario)
+    if usuario is None:
+        return redirect(url_for('home'))
+
+    return render_template('rotina.html', 
+                           css_path=css_, 
+                           logo_path=logo_,
+                           home_path=home_url,
+                           config_path=config_url,
+                           nome_usuario=usuario.nome,
+                           nickname_usuario=usuario.nickname,
+                           email_usuario=usuario.email)
 
 @app.route("/materias")
 def materias():
@@ -157,6 +184,9 @@ def materias():
 
     logo_ = url_for('static', filename='imagens/logo.png')
     css_ = url_for('static', filename='style.css')
+
+    email_usuario = session.get('email_usuario')
+    usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
 
     return render_template('materias.html', 
                            css_path=css_, 
@@ -172,6 +202,9 @@ def desafios():
     logo_ = url_for('static', filename='imagens/logo.png')
     css_ = url_for('static', filename='style.css')
 
+    email_usuario = session.get('email_usuario')
+    usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
+
     return render_template('desafios.html', 
                            css_path=css_, 
                            logo_path=logo_,
@@ -186,6 +219,9 @@ def sobre():
     logo_ = url_for('static', filename='imagens/logo.png')
     css_ = url_for('static', filename='style.css')
 
+    email_usuario = session.get('email_usuario')
+    usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
+
     return render_template('sobre.html', 
                            css_path=css_, 
                            logo_path=logo_,
@@ -199,10 +235,21 @@ def configuracao():
     logo_ = url_for('static', filename='imagens/logo.png')
     css_ = url_for('static', filename='style.css')
 
+    email_usuario = session.get('email_usuario')
+    if not email_usuario:
+        return redirect(url_for('home'))
+
+    usuario = db.session.query(Usuarios).filter(Usuarios.email == email_usuario).first()
+    if usuario is None:
+        return redirect(url_for('home'))
+
     return render_template('config.html', 
                            css_path=css_, 
                            logo_path=logo_,
-                           home_path=home_url)
+                           home_path=home_url,
+                           nome_usuario=usuario.nome,
+                           nickname_usuario=usuario.nickname,
+                           email_usuario=usuario.email)
 
 
 #@app.route("/usuarios/<nome_usuario>")
