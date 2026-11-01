@@ -4,7 +4,13 @@ use Lumina;
 create table usuarios(email varchar(100) not null Primary key,
 					 senha varchar(100) not null ,
                      nome varchar(100) not null,
-                     nickName varchar(100)not null);
+                     nickName varchar(100)not null,
+                     sequenciaDiaria int not null,
+                     melhorSequencia int not null,
+                     totalDiasAcesso int not null,
+                     ultimoAcesso date,
+                     diasSemana varchar(200) not null,
+                     fotoPerfil varchar(200));
                      
 create table atividades(codigoATIV varchar(100) not null primary key,
                         gabarito varchar(200) not null,

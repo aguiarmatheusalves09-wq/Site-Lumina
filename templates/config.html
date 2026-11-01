@@ -22,37 +22,43 @@
 
       <!-- Abas: Perfil / Editar -->
       <div class="profile-tabs">
-        <button class="profile-tab-btn active" onclick="switchProfileTab('view', this)">Perfil</button>
-        <button class="profile-tab-btn" onclick="switchProfileTab('edit', this)">Editar</button>
+        <button class="profile-tab-btn{{ ' active' if not erro_config else '' }}" onclick="switchProfileTab('view', this)">Perfil</button>
+        <button class="profile-tab-btn{{ ' active' if erro_config else '' }}" onclick="switchProfileTab('edit', this)">Editar</button>
       </div>
 
       <!-- ===== PAINEL: VISUALIZAR PERFIL ===== -->
-      <div id="panel-view" class="profile-panel active">
+      <div id="panel-view" class="profile-panel{{ '' if erro_config else ' active' }}">
         <div class="profile-view">
 
-          <div class="profile-avatar-lg" id="profileAvatarLg">👤</div>
+          <div class="profile-avatar-lg" id="profileAvatarLg">
+            {% if foto_usuario %}
+              <img src="{{ url_for('static', filename='uploads/' + foto_usuario) }}" alt="Foto de perfil">
+            {% else %}
+              👤
+            {% endif %}
+          </div>
 
           <div class="profile-info">
             <div class="profile-name" id="displayName">{{ nome_usuario }}</div>
-            <div class="profile-nickname" id="displayNickname">{{ nickname_usuario }}</div>
+            <div class="profile-nickname" id="displayNickname">@{{ nickname_usuario }}</div>
             <div class="profile-email" id="displayEmail">{{ email_usuario }}</div>
           </div>
 
-          <!-- Sequência + Recordes -->
+          <!-- Sequência + Recordes (valores vindos do banco via Flask) -->
           <div class="streak-row">
             <div class="streak-card">
               <div class="streak-icon">🔥</div>
-              <div class="streak-value" id="streakCount">0</div>
+              <div class="streak-value" id="streakCount">{{ sequenciaDiaria }}</div>
               <div class="streak-label">Dias seguidos</div>
             </div>
             <div class="streak-card">
               <div class="streak-icon">🏆</div>
-              <div class="streak-value" id="streakBest">0</div>
+              <div class="streak-value" id="streakBest">{{ melhorSequencia }}</div>
               <div class="streak-label">Melhor sequência</div>
             </div>
             <div class="streak-card">
               <div class="streak-icon">📅</div>
-              <div class="streak-value" id="totalDays">0</div>
+              <div class="streak-value" id="totalDays">{{ totalDiasAcesso }}</div>
               <div class="streak-label">Total de dias</div>
             </div>
           </div>
@@ -72,31 +78,41 @@
       </div>
 
       <!-- ===== PAINEL: EDITAR PERFIL ===== -->
-      <div id="panel-edit" class="profile-panel">
+      <div id="panel-edit" class="profile-panel{{ ' active' if erro_config else '' }}">
 
-        <form action="" method="POST" enctype="multipart/form-data">
+        {% if erro_config %}
+          <p style="color:#c0392b; font-weight:600; margin-bottom:12px;">{{ erro_config }}</p>
+        {% endif %}
+
+        <form action="{{ url_for('configuracao') }}" method="POST" enctype="multipart/form-data">
 
           <div class="profile-upload">
-            <div class="avatar-preview" id="avatarPreview">👤</div>
+            <div class="avatar-preview" id="avatarPreview">
+              {% if foto_usuario %}
+                <img src="{{ url_for('static', filename='uploads/' + foto_usuario) }}" alt="Foto de perfil">
+              {% else %}
+                👤
+              {% endif %}
+            </div>
             <div>
               <label for="foto" class="file-input-label">Alterar Foto de Perfil</label>
-              <input type="file" id="foto" name="foto" accept="image/*">
+              <input type="file" id="foto" name="foto" accept="image/png, image/jpeg, image/gif, image/webp">
             </div>
           </div>
 
           <div class="form-group">
             <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="Seu nome completo">
+            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" value="{{ nome_usuario }}">
           </div>
 
           <div class="form-group">
             <label for="nickname">Nickname</label>
-            <input type="text" id="nickname" name="nickname" placeholder="Como quer ser chamado(a)">
+            <input type="text" id="nickname" name="nickname" placeholder="Como quer ser chamado(a)" value="{{ nickname_usuario }}">
           </div>
 
           <div class="form-group">
             <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+            <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" value="{{ email_usuario }}" required>
           </div>
 
           <div class="form-group">
@@ -126,69 +142,66 @@
       document.querySelectorAll('.profile-tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('panel-' + panelId).classList.add('active');
       btn.classList.add('active');
-      if (panelId === 'view') refreshProfileView();
     }
 
-    // ── Dados do perfil (simulado; no Flask virá do servidor) ────
-    const profile = JSON.parse(localStorage.getItem('lumina_profile') || 'null') || {
-      name: document.getElementById('displayName').textContent.trim(),
-      nickname: document.getElementById('displayNickname').textContent.trim(),
-      email: document.getElementById('displayEmail').textContent.trim(),
-      photo: null
+    // ── Estado inicial da sequência, vindo do banco (Flask/Jinja) ─
+    let streakState = {
+      current: {{ sequenciaDiaria | default(0) }},
+      best: {{ melhorSequencia | default(0) }},
+      total: {{ totalDiasAcesso | default(0) }},
+      diasSemana: {{ diasSemana | tojson }}
     };
 
-    // ── Streak / Sequência ───────────────────────────────────────
-    function loadStreak() {
-      return JSON.parse(localStorage.getItem('lumina_streak') || 'null') || {
-        current: 0,
-        best: 0,
-        total: 0,
-        lastDate: null,
-        weekDone: []          // array de datas ISO dos últimos 7 dias com check-in
-      };
+    function todayISO() {
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      return d.toISOString().slice(0, 10);
     }
 
-    function saveStreak(s) { localStorage.setItem('lumina_streak', JSON.stringify(s)); }
+    // ── Check-in: avisa o Flask, que grava no banco e devolve o estado atualizado ─
+    async function doCheckIn() {
+      const btn = document.getElementById('checkInBtn');
+      btn.disabled = true;
 
-    function todayISO() { return new Date().toISOString().slice(0, 10); }
+      try {
+        const resp = await fetch('/api/checkin', { method: 'POST' });
+        if (!resp.ok) {
+          alert('Não foi possível marcar o acesso. Faça login novamente.');
+          btn.disabled = false;
+          return;
+        }
+        const data = await resp.json();
 
-    function doCheckIn() {
-      const s = loadStreak();
-      const today = todayISO();
-      if (s.lastDate === today) { alert('Você já marcou o acesso de hoje! 🎉'); return; }
+        streakState.current = data.sequenciaDiaria;
+        streakState.best = data.melhorSequencia;
+        streakState.total = data.totalDiasAcesso;
+        streakState.diasSemana = data.diasSemana;
 
-      // Calcula sequência
-      const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayISO = yesterday.toISOString().slice(0, 10);
-      s.current = (s.lastDate === yesterdayISO) ? s.current + 1 : 1;
-      s.best = Math.max(s.best, s.current);
-      s.total += 1;
-      s.lastDate = today;
+        refreshProfileView();
 
-      // Mantém só os últimos 7 dias únicos
-      if (!s.weekDone.includes(today)) s.weekDone.push(today);
-      const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 6);
-      const cutoffISO = cutoff.toISOString().slice(0, 10);
-      s.weekDone = s.weekDone.filter(d => d >= cutoffISO);
-
-      saveStreak(s);
-      refreshProfileView();
-      document.getElementById('checkInBtn').textContent = '✓ Acesso marcado!';
-      document.getElementById('checkInBtn').disabled = true;
-      document.getElementById('checkInBtn').style.opacity = '0.6';
+        if (data.jaMarcado) {
+          btn.textContent = '✓ Acesso já marcado hoje!';
+        } else {
+          btn.textContent = '✓ Acesso marcado!';
+        }
+        btn.style.opacity = '0.6';
+      } catch (err) {
+        alert('Erro de conexão ao marcar o acesso.');
+        btn.disabled = false;
+      }
     }
 
     // ── Barra semanal ────────────────────────────────────────────
     const DAYS_PT = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-    function buildWeekBar(weekDone) {
+    function buildWeekBar(diasSemana) {
       const container = document.getElementById('weekDays');
       container.innerHTML = '';
       const today = new Date();
       for (let i = 6; i >= 0; i--) {
         const d = new Date(today); d.setDate(today.getDate() - i);
         const iso = d.toISOString().slice(0, 10);
-        const isDone = weekDone.includes(iso);
+        const isDone = diasSemana.includes(iso);
         const isToday = i === 0;
         const div = document.createElement('div');
         div.className = 'streak-day';
@@ -203,23 +216,13 @@
 
     // ── Atualizar visualização ───────────────────────────────────
     function refreshProfileView() {
-      const s = loadStreak();
-      document.getElementById('streakCount').textContent = s.current;
-      document.getElementById('streakBest').textContent = s.best;
-      document.getElementById('totalDays').textContent = s.total;
-      buildWeekBar(s.weekDone);
+      document.getElementById('streakCount').textContent = streakState.current;
+      document.getElementById('streakBest').textContent = streakState.best;
+      document.getElementById('totalDays').textContent = streakState.total;
+      buildWeekBar(streakState.diasSemana);
 
-      // Nome / nickname / email
-      document.getElementById('displayName').textContent = profile.name;
-      document.getElementById('displayNickname').textContent = '@' + profile.nickname;
-      document.getElementById('displayEmail').textContent = profile.email;
-      if (profile.photo) {
-        document.getElementById('profileAvatarLg').innerHTML = `<img src="${profile.photo}" alt="Foto">`;
-      }
-
-      // Botão de check-in
       const btn = document.getElementById('checkInBtn');
-      if (s.lastDate === todayISO()) {
+      if (streakState.diasSemana.includes(todayISO())) {
         btn.textContent = '✓ Acesso já marcado hoje!';
         btn.disabled = true;
         btn.style.opacity = '0.6';
@@ -230,7 +233,7 @@
       }
     }
 
-    // ── Preview foto ao editar ───────────────────────────────────
+    // ── Preview foto ao escolher o arquivo (antes de salvar) ─────
     document.getElementById('foto').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
