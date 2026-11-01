@@ -11,8 +11,8 @@ from db import db
 from models import Usuarios
 
 email_usuario = None  
+app.secret_key = 'senhasupersecretadosite'  # Chave para assinar os dados da sessão armazenados no navegador, ajudando a detectar se foram alterados.
 
-app.secret_key = 'your_secret_key'  # Adicione uma chave secreta para a sessão
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 EXTENSOES_PERMITIDAS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'jfif'}
@@ -48,13 +48,13 @@ def cadastro():
     css_ = url_for('static', filename='style.css')
     logo_ = url_for('static', filename='imagens/logo.png')
 
-
     if request.method == "GET":
         return render_template('cadastro.html', 
                            css_path=css_,
                            inicio_path=inicio_url,
                            logo_path=logo_,
                            login_path=login_url)
+    
     elif request.method == "POST":
         nome = request.form.get("nome")
         email = request.form.get("email")
@@ -89,7 +89,7 @@ def cadastro():
         )
         db.session.add(novo_usuario)
         db.session.commit()
-        session['email_usuario'] = email  # Store email in session
+        session['email_usuario'] = email  
 
         return redirect(url_for('principal_home'))
         
@@ -99,7 +99,6 @@ def login():
     login_url = url_for('login')
     cadastro_url = url_for('cadastro')
     home_url = url_for('principal_home')
-
 
     css_ = url_for('static', filename='style.css')
     logo_ = url_for('static', filename='imagens/logo.png')
@@ -259,7 +258,10 @@ def configuracao():
         return redirect(url_for('home'))
 
     if request.method == "GET":
-        dias_semana = usuario.diasSemana.split(",") if usuario.diasSemana else []
+        dias_semana = []
+        if usuario.diasSemana:
+            dias_semana = usuario.diasSemana.split(",")
+
         return render_template('config.html', 
                            css_path=css_, 
                            logo_path=logo_,
@@ -282,11 +284,9 @@ def configuracao():
         sequencia_diaria = request.form.get("sequenciaDiaria")
         foto = request.files.get("foto")
 
-        print("DEBUG >> foto recebida no request.files:", foto)
-        print("DEBUG >> nome do arquivo enviado:", foto.filename if foto else None)
-        print("DEBUG >> senha_atual preenchida?", bool(senha_atual))
-
-        dias_semana = usuario.diasSemana.split(",") if usuario.diasSemana else []
+        dias_semana = []
+        if usuario.diasSemana:
+            dias_semana = usuario.diasSemana.split(",")
         dados_base = dict(
             css_path=css_,
             logo_path=logo_,
@@ -301,7 +301,6 @@ def configuracao():
             email_usuario=usuario.email,
         )
 
-        # confirma a senha atual antes de aceitar qualquer alteração
         if not senha_atual or senha_atual != usuario.senha:
             return render_template('config.html', **dados_base,
                                     erro_config="Senha atual incorreta!")
@@ -318,26 +317,24 @@ def configuracao():
         if sequencia_diaria is not None:
             setattr(usuario, "sequenciaDiaria", int(sequencia_diaria))
 
-        if foto and foto.filename and extensao_permitida(foto.filename):
-            extensao = foto.filename.rsplit('.', 1)[1].lower()
-            if extensao == 'jfif':
-                extensao = 'jpg'
-            email_seguro = secure_filename(usuario.email.replace("@", "_at_"))
-            nome_arquivo = f"{email_seguro}.{extensao}"
+        if foto and foto.filename:
+            if extensao_permitida(foto.filename):
+                extensao = foto.filename.rsplit('.', 1)[1].lower()
+                if extensao == 'jfif':
+                    extensao = 'jpg'
 
-            pasta_absoluta = os.path.join(app.root_path, UPLOAD_FOLDER)
-            print("DEBUG >> pasta de upload:", pasta_absoluta)
-            os.makedirs(pasta_absoluta, exist_ok=True)
+                email_seguro = secure_filename(usuario.email.replace("@", "_at_"))
+                nome_arquivo = f"{email_seguro}.{extensao}"
+                pasta_absoluta = os.path.join(app.root_path, UPLOAD_FOLDER)
+                os.makedirs(pasta_absoluta, exist_ok=True)
 
-            caminho_final = os.path.join(pasta_absoluta, nome_arquivo)
-            foto.save(caminho_final)
-
-            usuario.fotoPerfil = nome_arquivo
+                caminho_final = os.path.join(pasta_absoluta, nome_arquivo)
+                foto.save(caminho_final)
+                usuario.fotoPerfil = nome_arquivo
 
         db.session.commit()
         print("DEBUG >> commit feito. fotoPerfil no objeto após commit:", usuario.fotoPerfil)
 
-        # a sessão guarda o e-mail como chave: se ele mudou, atualiza a sessão também
         session['email_usuario'] = usuario.email
 
         return redirect(url_for('configuracao'))
@@ -355,14 +352,13 @@ def checkin():
         return jsonify({"erro": "Usuário não encontrado"}), 404
 
     hoje = date.today()
-    hoje_iso = hoje.isoformat()
+    hoje_iso = hoje.isoformat() #Converte para AAAA-MM-DD
     ontem_iso = (hoje - timedelta(days=1)).isoformat()
 
-    # ultimoAcesso é String no banco, então comparamos como string (formato ISO: AAAA-MM-DD)
-
-    # já marcou hoje: só devolve o estado atual
     if usuario.ultimoAcesso == hoje_iso:
-        dias_semana = usuario.diasSemana.split(",") if usuario.diasSemana else []
+        dias_semana = []
+        if usuario.diasSemana:
+            dias_semana = usuario.diasSemana.split(",")
         return jsonify({
             "jaMarcado": True,
             "sequenciaDiaria": usuario.sequenciaDiaria or 0,
@@ -380,7 +376,9 @@ def checkin():
     usuario.totalDiasAcesso = (usuario.totalDiasAcesso or 0) + 1
     usuario.ultimoAcesso = hoje_iso
 
-    dias_lista = usuario.diasSemana.split(",") if usuario.diasSemana else []
+    dias_lista = []
+    if usuario.diasSemana:
+        dias_lista = usuario.diasSemana.split(",")
     if hoje_iso not in dias_lista:
         dias_lista.append(hoje_iso)
 
