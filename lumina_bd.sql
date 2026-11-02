@@ -11,6 +11,16 @@ create table usuarios(email varchar(100) not null Primary key,
                      ultimoAcesso date,
                      diasSemana varchar(200) not null,
                      fotoPerfil varchar(200));
+
+create table rotinas (id int auto_increment primary key,
+                     emailUSU varchar(100) not null,
+                     data date not null,
+                     manha text,
+                     tarde text,
+                     noite text,
+                     materia_dia varchar(50),
+                     foreign key (emailUSU) references usuarios(email),
+                     constraint uq_usuario_data unique (emailUSU, data));
                      
 create table atividades(codigoATIV varchar(100) not null primary key,
                         gabarito varchar(200) not null,

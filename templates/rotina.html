@@ -95,7 +95,15 @@
     const SUBJECTS = { 'Mat':'#c8bdab', 'Quí':'#c8bdab', 'Fís':'#c8bdab', 'Bio':'#c8bdab' };
 
     let viewYear, viewMonth, selectedDate = null;
-    let routineData = JSON.parse(localStorage.getItem('lumina_routine') || '{}');
+    // antes: let routineData = JSON.parse(localStorage.getItem('lumina_routine') || '{}');
+    let routineData = {};
+
+    async function loadRoutine() {
+      try {
+        const r = await fetch('/api/rotina');
+        if (r.ok) routineData = await r.json();
+      } catch (e) { console.error(e); }
+}
     // routineData[ISO] = { manha, tarde, noite, subj }
 
     function keyOf(y, m, d) {
@@ -209,11 +217,21 @@
       routineData[selectedDate].noite = document.getElementById('slotNoite').value;
     }
 
-    function saveAll() {
+    async function saveAll() {
       saveSlot();
-      localStorage.setItem('lumina_routine', JSON.stringify(routineData));
       const btn = document.querySelector('.save-btn');
-      btn.textContent = 'Salvo! ✓';
+      try {
+        // O fetch manda os dados para o backend, que salva no banco de dados
+        const r = await fetch('/api/rotina', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(routineData)
+        });
+        if (!r.ok) throw new Error();
+        btn.textContent = 'Salvo! ✓';
+      } catch (e) {
+        btn.textContent = 'Erro ao salvar';
+      }
       setTimeout(() => btn.textContent = 'Salvar Rotina', 1800);
     }
 
@@ -225,13 +243,16 @@
     });
 
     // ── Init ─────────────────────────────────────────────────────
-    const now = new Date();
-    viewYear  = now.getFullYear();
-    viewMonth = now.getMonth();
-    buildCalendar();
+    (async () => {
+      const now = new Date();
+      viewYear  = now.getFullYear();
+      viewMonth = now.getMonth();
+      await loadRoutine();
+      buildCalendar();
+      // Seleciona hoje por padrão
+      selectDay(keyOf(viewYear, viewMonth, now.getDate()), now.getDate());
+    })();
 
-    // Seleciona hoje por padrão
-    selectDay(keyOf(viewYear, viewMonth, now.getDate()), now.getDate());
   </script>
 
 </body>

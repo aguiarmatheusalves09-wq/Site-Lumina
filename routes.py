@@ -8,7 +8,7 @@ from datetime import date, timedelta
 import re
 from main import app
 from db import db
-from models import Usuarios
+from models import *
 
 email_usuario = None  
 app.secret_key = 'senhasupersecretadosite'  # Chave para assinar os dados da sessão armazenados no navegador, ajudando a detectar se foram alterados.
@@ -333,7 +333,6 @@ def configuracao():
                 usuario.fotoPerfil = nome_arquivo
 
         db.session.commit()
-        print("DEBUG >> commit feito. fotoPerfil no objeto após commit:", usuario.fotoPerfil)
 
         session['email_usuario'] = usuario.email
 
@@ -396,6 +395,58 @@ def checkin():
         "diasSemana": dias_lista,
     })
 
+@app.route("/api/rotina", methods=["GET", "POST"])
+def api_rotina():
+    email_usuario = session.get('email_usuario')
+    if not email_usuario:
+        return jsonify({"erro": "Não autenticado"}), 401
+
+    # Retornar todas as rotinas salvas do usuário
+    if request.method == "GET":
+        rotinas = db.session.query(Rotinas).filter(Rotinas.emailUSU == email_usuario).all()
+        return jsonify({
+            r.data.isoformat(): {
+                "manha": r.manha or "",
+                "tarde": r.tarde or "",
+                "noite": r.noite or "",
+                "subj": r.materia_dia or "",
+            }
+            for r in rotinas
+        })
+
+    # Criar, atualizar ou remover cada rotina recebida
+    rotinas_enviadas = request.get_json(silent=True) or {}
+    for data_iso, dados_rotina in rotinas_enviadas.items():
+        try:
+            dia = date.fromisoformat(data_iso)
+        except ValueError:
+            continue
+
+        manha = (dados_rotina.get("manha") or "").strip()
+        tarde = (dados_rotina.get("tarde") or "").strip()
+        noite = (dados_rotina.get("noite") or "").strip()
+        materia = (dados_rotina.get("subj") or "").strip()
+
+        rotina = db.session.query(Rotinas).filter(
+            Rotinas.emailUSU == email_usuario, Rotinas.data == dia
+        ).first()
+
+        if not (manha or tarde or noite or materia):
+            if rotina:
+                db.session.delete(rotina)
+            continue
+
+        if rotina is None:
+            rotina = Rotinas(emailUSU=email_usuario, data=dia)
+            db.session.add(rotina)
+
+        rotina.manha = manha
+        rotina.tarde = tarde
+        rotina.noite = noite
+        rotina.materia_dia = materia
+
+    db.session.commit()
+    return jsonify({"ok": True})
 
 #@app.route("/usuarios/<nome_usuario>")
 #def usuarios(nome_usuario):
