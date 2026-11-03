@@ -224,8 +224,8 @@
         // O fetch manda os dados para o backend, que salva no banco de dados
         const r = await fetch('/api/rotina', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(routineData)
+          headers: { 'Content-Type': 'application/json' }, //dados em formato json
+          body: JSON.stringify(routineData) //conteudo enviado
         });
         if (!r.ok) throw new Error();
         btn.textContent = 'Salvo! ✓';
