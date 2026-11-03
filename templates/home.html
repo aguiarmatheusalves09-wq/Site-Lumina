@@ -20,9 +20,12 @@
   </header>
 
   <!-- Estrela (leva para Configurações) -->
-  <a href="{{ config_path }}" class="star-link">
-    <div class="star-icon" id="star">✦</div>
-  </a>
+  <div class="user-corner">
+    <a href="{{ config_path }}" class="user-avatar" title="Meu perfil">{% if foto_usuario %}<img src="{{ url_for('static', filename='uploads/' + foto_usuario) }}" alt="Foto de perfil">{% else %}👤{% endif %}</a>
+    <a href="{{ config_path }}" class="star-link">
+      <div class="star-icon" id="star">✦</div>
+    </a>
+  </div>
 
   <section class="hero-section">
     <div class="hero-stripe"></div>

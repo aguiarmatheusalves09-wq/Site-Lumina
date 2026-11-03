@@ -15,7 +15,10 @@
     <a href="{{ home_path }}" class="logo-link">Lumina</a>
   </header>
 
-  <div class="star-icon" id="star">✦</div>
+  <div class="user-corner">
+    <div class="user-avatar">{% if foto_usuario %}<img src="{{ url_for('static', filename='uploads/' + foto_usuario) }}" alt="Foto de perfil">{% else %}👤{% endif %}</div>
+    <div class="star-icon" id="star">✦</div>
+  </div>
 
   <main class="main-container main-sm">
     <div class="card config-card">
@@ -112,7 +115,7 @@
 
           <div class="form-group">
             <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" value="{{ email_usuario }}" required>
+            <input type="email" id="email" value="{{ email_usuario }}" readonly disabled style="opacity:0.6; cursor:not-allowed;">
           </div>
 
           <div class="form-group">
